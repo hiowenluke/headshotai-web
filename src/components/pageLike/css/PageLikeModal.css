@@ -1,0 +1,254 @@
+/* 透明背景，让下层内容可见 */
+.page-like-modal::part(content) {
+    --background: transparent;
+    background: transparent !important;
+    height: 100%;
+    overflow: hidden;
+    /* 防止滑动时出现滚动条 */
+}
+
+/* 为活动的模态框增加更高的 z-index */
+.page-like-modal.modal-active {
+    z-index: var(--modal-z-index, 9999) !important;
+}
+
+.page-like-modal.modal-active::part(content) {
+    z-index: var(--modal-content-z-index, 9999) !important;
+}
+
+.page-like-modal.modal-active::part(backdrop) {
+    z-index: var(--modal-backdrop-z-index, 9998) !important;
+}
+
+/* 背景遮罩，在滑动时会变透明 */
+.page-like-modal::part(backdrop) {
+    --backdrop-opacity: 0.8;
+    background: rgba(37, 38, 43, 0.8) !important;
+    opacity: 0.8 !important;
+    transition: opacity 0.3s ease;
+}
+
+/* 滑动时调整背景透明度 */
+.page-like-modal.swiping::part(backdrop) {
+    /* 从 0.8 开始，变化更慢：progress=1 时为 0.6，progress=2 时为 0.4，progress=4 时完全透明 */
+    opacity: calc(0.8 - var(--swipe-progress, 0) * 0.2) !important;
+    transition: none; /* 滑动时禁用过渡，确保跟手性 */
+}
+
+/* 模态框触摸包装层 */
+.modal-touch-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* 阻止事件传播到主页，但允许内部处理 */
+    touch-action: none;
+    /* 滑动过程中的过渡效果 */
+    will-change: transform;
+}
+
+/* 只在非滑动状态下的包装层使用过渡 */
+.page-like-modal:not(.swiping) .modal-touch-wrapper {
+    transition: transform 0.3s ease-out;
+}
+
+.page-like-modal:not(.swiping)::part(backdrop) {
+    transition: opacity 0.3s ease-out;
+}
+
+/* 退出状态下的背景遮罩处理 */
+.page-like-modal.exiting::part(backdrop) {
+    opacity: 0 !important;
+}
+
+/* 进入时保持遮罩透明，避免闪烁 */
+.page-like-modal:not(.modal-active)::part(backdrop) {
+    opacity: 0 !important;
+    transition: none !important;
+}
+
+/* 进入动画期间强制保持透明 */
+.page-like-modal.modal-active:not(.swiping):not(.exiting)::part(backdrop) {
+    animation: none !important;
+}
+
+.page-like-modal ion-page {
+    background: #25262B;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-like-modal ion-content {
+    --background: #25262B;
+    background: #25262B !important;
+}
+
+.plm-content {
+    padding: 0;
+    height: 100%;
+    /* 使用 ion-content 的 CSS 变量来设置内部 padding */
+    --padding-top: var(--plm-header-height, 56px);
+    --offset-top: var(--plm-header-height, 0px);
+}
+
+.plm-single,
+.plm-tab-panel {
+    height: 100dvh; /* 现代浏览器动态视口高度 */
+}
+
+/* 当禁用内容滚动时应用的样式 */
+.page-like-modal.disable-content-scroll ion-content {
+    --overflow-y: hidden;
+    overflow-y: hidden !important;
+    overscroll-behavior: none !important;
+}
+
+.page-like-modal.disable-content-scroll .plm-content {
+    /* 确保内容不会产生滚动 */
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+}
+
+.page-like-modal.disable-content-scroll .plm-single,
+.page-like-modal.disable-content-scroll .plm-tab-panel {
+    overflow: hidden;
+    min-height: 100dvh;
+}
+
+/* 禁用滚动时的modal-page样式 */
+.page-like-modal.disable-content-scroll .modal-page {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    max-height: 100dvh !important;
+}
+
+/* 全局禁用弹性滚动和滚动条 */
+.page-like-modal.disable-content-scroll {
+    overscroll-behavior: none !important;
+}
+
+/* Tab 滑动动画样式 */
+.tab-container {
+    height: 100dvh;
+    will-change: transform;
+    position: relative;
+}
+
+.tab-slide-panel {
+    height: 100dvh;
+    position: relative;
+}
+
+/* 确保 generator 内容区域正确布局 */
+.tab-slide-panel :deep(.generator-content) {
+    position: relative;
+    min-height: 100dvh;
+}
+
+/* 当禁用内容滚动时应用的样式 */
+.page-like-modal.disable-content-scroll .tab-slide-panel {
+    overflow: hidden; /* 禁用所有滚动 */
+}
+
+.page-like-modal.disable-content-scroll .tab-slide-panel :deep(.generator-content) {
+    overflow: hidden; /* 禁用滚动 */
+}
+
+/* 确保上传区域和其他内容不会被拉伸 */
+.tab-slide-panel :deep(.upload-section),
+.tab-slide-panel :deep(.demo-section),
+.tab-slide-panel :deep(.content-section) {
+    position: relative;
+    width: 100%;
+    max-width: none;
+}
+
+/* 通用页面样式 - 现在在 PageLikeModal.vue 的 <style> 中定义 */
+
+/* v 模式特殊处理：让内容区域能够触发整个窗口的手势 */
+.page-like-modal .v-mode-page {
+    background: #25262B;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 底部固定区域样式 */
+.plm-bottom-area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    min-height: 90px;
+    z-index: var(--button-z-index, 10012);
+    background: transparent;
+    pointer-events: auto;
+    /* 提示浏览器该区域主要进行水平滚动/手势 */
+    touch-action: pan-x;
+}
+
+.page-like-modal .v-mode-content {
+    --background: #25262B;
+    background: #25262B !important;
+    /* 允许触摸事件传播到手势处理器，使整个窗口可以被拖动 */
+    touch-action: none;
+    pointer-events: auto;
+    --offset-top: var(--plm-header-height, 0px);
+}
+
+.page-like-modal .v-mode-tab-panel,
+.page-like-modal .v-mode-single {
+    min-height: 100dvh;
+    touch-action: none;
+    pointer-events: auto;
+}
+
+/* 当禁用内容滚动时，对 v 模式的特殊处理 */
+.page-like-modal.disable-content-scroll .v-mode-content {
+    /* 强制禁用滚动 */
+    --overflow-y: hidden;
+    overflow-y: hidden !important;
+    overflow: hidden;
+}
+
+.page-like-modal.disable-content-scroll .v-mode-tab-panel,
+.page-like-modal.disable-content-scroll .v-mode-single {
+    overflow: hidden;
+    min-height: 100dvh;
+}
+
+/* 特别针对 AdaptivePreviewArea 的样式：确保可以触发整个窗口的手势 */
+.page-like-modal .v-mode-content :deep(.adaptive-preview-shell),
+.page-like-modal .v-mode-content :deep(.adaptive-preview-inner) {
+    touch-action: none;
+    pointer-events: auto;
+    position: relative;
+}
+
+/* modal-content 样式现在在 PageLikeModal.vue 的 <style> 中定义 */
+
+.page-like-modal :deep(.page-wrapper) {
+    padding: 10px 10px 10px;
+}
+
+.page-like-modal :deep(.page-wrapper h2) {
+    margin: 0 0 12px;
+    font-size: 22px;
+    color: #fff;
+}
+
+.page-like-modal :deep(.desc) {
+    opacity: .85;
+    color: #fff;
+}
+
+.page-like-modal :deep(.meta) {
+    font-size: 12px;
+    opacity: .55;
+    color: #fff;
+    margin-top: 28px;
+}
+
+/* 移除PC支持代码 - 只支持移动端 */

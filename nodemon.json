@@ -1,0 +1,12 @@
+{
+  "watch": [".env"],
+  "ext": "env",
+  "ignore": ["node_modules/", "dist/", "build/"],
+  "exec": "npm run build",
+  "delay": 1000,
+  "verbose": true,
+  "events": {
+    "start": "echo '[nodemon] Environment files watcher started'",
+    "restart": "echo '[nodemon] Environment file changed, rebuilding...'"
+  }
+}

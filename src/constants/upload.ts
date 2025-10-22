@@ -1,0 +1,1 @@
+export const DEFAULT_UPLOAD_MIN_DISPLAY_MS = 3000;

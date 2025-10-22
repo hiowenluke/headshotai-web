@@ -1,0 +1,119 @@
+/* Generator组件共享样式 */
+
+/* 基础包装器样式 */
+.gen-wrapper {
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --fs-normal-text: 16.5px;
+    --fs-small-text: 15.4px;
+    --fs-btn-large: 23.4px;
+    --fs-tab: 20px;
+    position: relative;
+}
+
+/* 主体区域样式 */
+.gen-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+}
+
+/* 占位内容样式 */
+.placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px 20px;
+    text-align: center;
+    color: #fff;
+}
+
+.placeholder-content h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #fff;
+}
+
+.placeholder-content p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 30px;
+}
+
+/* 价格和时间信息样式 */
+.placeholder-content .price-info,
+.placeholder-content .eta-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-weight: 600;
+    min-width: 200px;
+}
+
+.placeholder-content .price-info {
+    color: #FFD700;
+}
+
+.placeholder-content .eta-info {
+    color: #a8d8ff;
+}
+
+/* 测试按钮基础样式 */
+.test-multi-layer-btn {
+    width: 100%;
+    max-width: 300px;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 默认绿色按钮 */
+.test-multi-layer-btn.default {
+    background: #28a745;
+}
+
+.test-multi-layer-btn.default:hover {
+    background: #218838;
+}
+
+/* HOT样式按钮 */
+.test-multi-layer-btn.hot {
+    background: linear-gradient(135deg, #ff6b6b, #ffa500);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.test-multi-layer-btn.hot:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+}
+
+/* HOT标记样式 */
+.hot-badge {
+    background: linear-gradient(135deg, #ff6b6b, #ffa500);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}

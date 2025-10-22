@@ -1,0 +1,8 @@
+{
+  "name": "headshot.aip.so",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "026e1ee8"
+}

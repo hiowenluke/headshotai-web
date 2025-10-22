@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+timestamp() { date "+%Y-%m-%d %H:%M:%S"; }
+# Unified auto build + preview (no HMR) for mobile testing.
+# Requirements: macOS (or Linux) + fswatch (brew install fswatch) + optional terminal notifier and say.
+# Features:
+#  - Initial type checking + build
+#  - Start vite preview on given host/port
+#  - Watch src/public/index.html/vite.config.* changes -> debounce -> rebuild
+#  - Desktop notification + sound on success/failure
+#  - Colored concise logs
+
+set -euo pipefail
+
+# Quick syntax self-check (ignored if fails silently)
+if command -v bash >/dev/null 2>&1; then
+  bash -n "$0" 2>/dev/null || true
+fi
+
+HOST=${HOST:-0.0.0.0}
+PORT=${PORT:-5174}
+DEBOUNCE_MS=${DEBOUNCE_MS:-400}
+WATCH_PATHS=(src public index.html vite.config.ts .env)
+BUILD_CMD=${BUILD_CMD:-npm run build}
+PREVIEW_CMD="npx vite preview --host ${HOST} --port ${PORT} --strictPort"
+LOG_PREFIX="[auto-preview]"
+LAST_BUILD_STATUS=0
+BACKEND_TARGET=${BACKEND_TARGET:-http://127.0.0.1:5010}
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+color() { # usage: color red "text"
+  local c="$1"; shift
+  local code
+  case "$c" in
+    red) code='\033[31m';; green) code='\033[32m';; yellow) code='\033[33m';; blue) code='\033[34m';; magenta) code='\033[35m';; cyan) code='\033[36m';; *) code='';;
+  esac
+  printf "%b%s\033[0m" "$code" "$*"
+}
+
+# Notifications disabled (no-op)
+notify() { :; }
+
+LAN_IP=${LAN_IP:-$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo 127.0.0.1)}
+echo -e "${LOG_PREFIX} $(color cyan 'Listen:') $HOST:$PORT  $(color cyan 'Your LAN IP:') $LAN_IP"
+echo -e "${LOG_PREFIX} Phone preview URL: http://$LAN_IP:$PORT"
+[[ ${WATCH_PATHS[*]} ]] && echo -e "${LOG_PREFIX} Watching: ${WATCH_PATHS[*]}"
+
+echo -e "${LOG_PREFIX} Initial build..."
+if $BUILD_CMD; then
+  echo -e "${LOG_PREFIX} $(color green 'Initial build OK')"
+else
+  echo -e "${LOG_PREFIX} $(color red 'Initial build FAILED')"
+fi
+
+echo -e "${LOG_PREFIX} Backend: expecting API at ${BACKEND_TARGET} (start it separately if needed)"
+
+# Start preview in background
+( echo -e "${LOG_PREFIX} Starting preview server..."; $PREVIEW_CMD ) &
+PREVIEW_PID=$!
+trap 'echo -e "${LOG_PREFIX} shutting down"; kill $PREVIEW_PID 2>/dev/null || true; exit 0' INT TERM
+
+if ! have fswatch; then
+  echo -e "${LOG_PREFIX} $(color red 'fswatch not found. Install via: brew install fswatch')"
+  wait $PREVIEW_PID
+  exit 1
+fi
+
+# Debounced loop
+LAST_TS=0
+fswatch -or ${WATCH_PATHS[@]} | while read _; do
+  NOW=$(date +%s%3N 2>/dev/null || echo $(($(date +%s)*1000)))
+  if (( NOW - LAST_TS < DEBOUNCE_MS )); then continue; fi
+  LAST_TS=$NOW
+  echo -e "${LOG_PREFIX} $(color yellow 'Change detected -> rebuild')"
+  if $BUILD_CMD; then
+    if [[ $LAST_BUILD_STATUS -ne 0 ]]; then
+      echo -e "${LOG_PREFIX} $(color green 'Build recovered' $(date "+%Y-%m-%d %H:%M:%S"))"
+    else
+      echo -e "${LOG_PREFIX} $(color green 'Build OK' $(date "+%Y-%m-%d %H:%M:%S"))"
+    fi
+    LAST_BUILD_STATUS=0
+  else
+    LAST_BUILD_STATUS=$?
+    echo -e "${LOG_PREFIX} $(color red 'Build FAILED (will retry on next change)' $(date "+%Y-%m-%d %H:%M:%S"))"
+  # notifications suppressed
+  fi
+done
+
+wait $PREVIEW_PID

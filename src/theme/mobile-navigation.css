@@ -1,0 +1,46 @@
+/* 移动端防止导航手势的CSS */
+
+/* 防止iOS Safari的滑动返回手势 */
+body {
+  overscroll-behavior: none;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: contain;
+}
+
+/* 防止拖拽导航 */
+html, body {
+  touch-action: pan-y;
+  user-select: none;
+}
+
+/* 卡片滑动区域例外 - 允许水平滑动 */
+.native-scroll-gesture .scroll-container {
+  touch-action: pan-x !important;
+}
+
+/* 卡片内容区域恢复垂直滚动 */
+.panel-content {
+  touch-action: pan-y !important;
+}
+
+
+
+/* 防止边缘滑动 */
+ion-content {
+  overscroll-behavior: contain;
+  overscroll-behavior-x: none;
+}
+
+/* 移除响应式代码 - 只支持移动端，直接应用样式 */
+* {
+  overscroll-behavior-x: none;
+}
+
+/* 移除旧浏览器支持代码 - 现代浏览器直接应用 */
+body {
+  user-select: none;
+}
+
+html {
+  touch-action: manipulation;
+}

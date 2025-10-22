@@ -1,0 +1,64 @@
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+
+/* Global header and toolbar spacing */
+ion-header {
+  --padding-top: 0px;
+  margin-top: -7px;
+}
+
+ion-toolbar {
+  --padding-top: 2px;
+  --padding-bottom: 2px;
+  --min-height: 37px;
+}
+
+:root {
+	/* Light theme fallbacks (kept minimal) */
+	--ion-color-primary: #3880ff;
+	--ion-color-primary-rgb: 56,128,255;
+	--ion-color-secondary: #3dc2ff;
+	--ion-color-tertiary: #5260ff;
+	--ion-color-success: #2fdf75;
+	--ion-color-warning: #ffc409;
+	--ion-color-danger: #eb445a;
+	--ion-color-dark: #222428;
+	--ion-background-color: #ffffff;
+	/* 使用透明度以配合页面内自定义毛玻璃 toolbar 背景（组件内已加具体样式）*/
+	--ion-toolbar-background: rgba(37,38,43,0.55);
+	--ion-text-color: #000000;
+}
+
+/* Dark theme variables */
+.dark {
+	--ion-color-primary: #5b8cff;
+	--ion-color-primary-rgb: 91,140,255;
+	--ion-color-secondary: #66d0ff;
+	--ion-color-tertiary: #8a9bff;
+	--ion-color-success: #2fd57a;
+	--ion-color-warning: #ffb84d;
+	--ion-color-danger: #ff6b7a;
+
+	--ion-color-step-50: #0f1720;
+	--ion-color-step-100: #111418;
+	--ion-color-step-150: #14161a;
+	--ion-color-step-200: #16181c;
+
+	--ion-background-color: #0b0c0f;
+	/* Dark 模式下同样使用透明色，具体毛玻璃由各 toolbar 的局部样式加 blur */
+	--ion-toolbar-background: rgba(37,38,43,0.55);
+	--ion-item-background: #0f1114;
+	--ion-card-background: #0e1115;
+	--ion-text-color: #e6eef8;
+	--ion-color-medium: #95a0b0;
+	--ion-color-medium-shade: #7f8a98;
+	--ion-color-medium-tint: #a6b3cc;
+
+	/* surfaces */
+	--ion-surface-shade: rgba(255,255,255,0.02);
+	--ion-surface-tint: rgba(255,255,255,0.03);
+
+	/* Ensure components using rgba with the rgb var work */
+	--ion-color-primary-contrast: #ffffff;
+	--ion-color-primary-contrast-rgb: 255,255,255;
+}

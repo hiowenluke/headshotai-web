@@ -1,0 +1,284 @@
+.side-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+}
+
+.menu-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    will-change: transform;
+    pointer-events: auto;
+}
+
+ion-content.menu-scroll {
+    --background: transparent;
+    --padding-top: 0;
+}
+
+/* 自定义弹性滚动容器 */
+.menu-scroll-outer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+.menu-scroll-inner {
+    will-change: transform;
+    min-height: 100%;
+}
+
+.menu-icon {
+    width: 26px;
+    height: 26px;
+    color: #ffffff;
+    stroke-width: 1.6;
+}
+
+.menu-icon-wrap {
+    display: inline-flex;
+    width: 26px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+}
+
+.icon-placeholder {
+    opacity: 0;
+}
+
+/* 确保 ion-icon 与 menu-icon-wrap 具有相同的宽度和间距，实现文字对齐 */
+ion-item ion-icon[slot="start"] {
+    width: 26px !important;
+    min-width: 26px !important;
+    margin-right: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.pref-icon .menu-icon {
+    color: #ffffff;
+}
+
+/* 顶部栏加入安全区内边距，避免刘海遮挡；不要让下面列表再重复增加 safe-area */
+.menu-close-bar {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: calc(env(safe-area-inset-top, 0px) + 4px) 8px 0 8px;
+    background: rgba(37, 38, 43, 0.60);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.10), 0 4px 12px -4px rgba(0, 0, 0, 0.45);
+}
+
+.menu-close-bar .icon-button.close-btn {
+    margin: 0;
+    --padding-start: 4px;
+    --padding-end: 4px;
+    width: 44px;
+    height: 44px;
+}
+
+.menu-close-bar ion-icon.white-icon {
+    font-size: 30px;
+    color: #fff;
+    transform: none;
+}
+
+.menu-close-bar .icon-button.close-btn::part(native) {
+    border-radius: 50%;
+}
+
+.menu-glass-layer {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(37, 38, 43, 0.78), rgba(37, 38, 43, 0.68));
+    backdrop-filter: blur(18px) saturate(140%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: var(--overlay-alpha, 1);
+    transition: opacity 260ms cubic-bezier(0.36,0.66,0.04,1);
+}
+
+.menu-wrapper>*:not(.menu-glass-layer) {
+    position: relative;
+    z-index: 1;
+}
+
+ion-list,
+ion-item {
+    --background: transparent !important;
+    background: transparent !important;
+}
+
+ion-list#items-list {
+    margin-top: 0;
+    /* 顶部 safe-area 已由 .menu-close-bar 吸收，这里只保留内容与关闭栏的间距 */
+    padding-top: 32px;
+}
+
+ion-item.selected {
+    --background: rgba(255, 255, 255, 0.10) !important;
+}
+
+ion-item ion-label,
+ion-item ion-icon {
+    color: #ffffff !important;
+}
+
+ion-item ion-icon {
+    font-size: 26.4px !important;
+}
+
+/* 头像和用户信息样式 */
+.avatar-wrap { width:26px; height:26px; border-radius:50%; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; background:#2f323a; margin-right:16px; box-shadow:0 0 0 1px rgba(255,255,255,0.08),0 4px 10px -2px rgba(0,0,0,0.45); }
+.avatar-img { 
+  width:100%; 
+  height:100%; 
+  object-fit:cover; 
+  display:block;
+  image-rendering: auto;
+  user-select: none;
+}
+.avatar-fallback { font-size:12px; font-weight:600; color:#fff; }
+.user-label { display:flex; flex-direction:column; line-height:1.2; }
+.user-name { font-weight:600; font-size:15px; color:#fff; }
+.user-email { font-size:12px; opacity:0.8; color:#fff; }
+
+/* 用户信息右侧箭头图标 */
+.chevron-icon {
+    font-size: 20px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin-right: 2px;
+}
+
+/* 金币状态菜单项样式 */
+.coin-icon {
+    font-size: 26px !important;
+    color: #FFD700 !important; /* 金色 */
+    margin-right: 16px;
+}
+
+.coin-label {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.coin-text {
+    font-weight: 600;
+    font-size: 15px;
+    color: #FFD700 !important; /* 金色 */
+}
+
+/* Plans & Pricing 菜单项样式 */
+.pricing-label {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.pricing-title-container {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.pricing-title {
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+}
+
+.pricing-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFC107;
+    white-space: nowrap;
+}
+
+.buy-coins-btn {
+    background: #fff;
+    color: #2563eb; /* 蓝色文字 */
+    border: none;
+    border-radius: 16px;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-right: 6px;
+}
+
+.buy-coins-btn:hover {
+    background: #f1f5f9;
+    transform: scale(1.02);
+}
+
+.buy-coins-btn:active {
+    transform: scale(0.98);
+}
+
+/* 菜单分割线 */
+.menu-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 28px 18px;
+    border: none;
+}
+
+/* 头像加载指示器 */
+.avatar-loading-indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.avatar-error-indicator {
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 107, 107, 0.2);
+    border: 1px solid rgba(255, 107, 107, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #ff6b6b;
+}
+
+.avatar-error-indicator::before {
+    content: '!';
+}
+
+
+
+/* 移除按住 ion-item 时的激活（按下）高亮效果，不影响选中(selected)样式 */
+.side-menu-overlay ion-item {
+    --background-focused: transparent !important;
+    --background-hover: transparent !important;
+    --background-activated: transparent !important;
+    --background-activated-opacity: 0 !important;
+    --ripple-color: transparent !important;
+}
+.side-menu-overlay ion-item.ion-activated:not(.selected) {
+    --background: transparent !important;
+}
+.side-menu-overlay ion-item.ion-activated:not(.selected)::part(native) {
+    background: transparent !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

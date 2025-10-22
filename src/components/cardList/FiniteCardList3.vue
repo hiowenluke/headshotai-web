@@ -192,7 +192,6 @@ watch(
 .finite-card-list-3 {
   position: relative;
   padding: 10px;
-  padding-top: 70px;
   color: #fff;
 }
 

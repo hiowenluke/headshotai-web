@@ -177,7 +177,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true
         },
         // 代理用户上传的图片
-        '/uploads': {
+        '/upload': {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
         }
@@ -202,7 +202,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true
         },
         // 代理用户上传的图片
-        '/uploads': {
+        '/upload': {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
         }

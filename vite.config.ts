@@ -11,7 +11,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   // 加载环境变量
   const env = loadEnv(mode, process.cwd(), '')
-  
+
   // 获取本地网络接口 IP 地址
   const localIPs = Object.values(os.networkInterfaces())
     .flat()
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
   ].filter(Boolean))
 
   const PREVIEW_ALLOWED = Array.from(PREVIEW_ALLOWED_SET)
-  
+
   // 非 CI 环境下输出允许的主机列表
   if (!process.env.CI) {
     // eslint-disable-next-line no-console
@@ -42,30 +42,30 @@ export default defineConfig(({ mode }) => {
   return {
     // 插件配置
     plugins: [vue()],
-    
+
     // 指定index.html位置
     root: './public',
-    
+
     // 静态资源目录
     publicDir: '.', // 将public目录本身作为静态资源目录
-    
+
     // 路径解析配置
-    resolve: { 
-      alias: { 
+    resolve: {
+      alias: {
         '@': path.resolve(__dirname, './src'),
         '/src': path.resolve(__dirname, './src')
-      } 
+      }
     },
-    
+
     // 构建优化配置
     build: {
       target: 'es2020', // 现代浏览器目标，支持更多ES特性
       outDir: '../dist', // 输出到项目根目录的dist
       emptyOutDir: true, // 构建前清空输出目录
-      
+
       // 代码分割优化
       cssCodeSplit: true, // CSS 代码分割
-      
+
       // 压缩配置
       minify: 'terser',
       terserOptions: {
@@ -75,10 +75,10 @@ export default defineConfig(({ mode }) => {
           pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : []
         }
       },
-      
+
       // Chunk 大小警告阈值
       chunkSizeWarningLimit: 1000,
-      
+
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'public/index.html')
@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
         output: {
           // 入口文件命名
           entryFileNames: 'assets/app.[hash].js',
-          
+
           // Chunk 文件命名（懒加载路由）
           chunkFileNames: (chunkInfo) => {
             // 路由懒加载文件使用 route- 前缀
@@ -95,7 +95,7 @@ export default defineConfig(({ mode }) => {
             }
             return 'assets/[name].[hash].js';
           },
-          
+
           // CSS 文件命名
           assetFileNames: (assetInfo) => {
             if (assetInfo.name?.endsWith('.css')) {
@@ -103,7 +103,7 @@ export default defineConfig(({ mode }) => {
             }
             return 'assets/[name].[hash].[ext]';
           },
-          
+
           // 手动分包策略
           manualChunks: (id) => {
             // 第三方依赖 - 长缓存
@@ -112,42 +112,42 @@ export default defineConfig(({ mode }) => {
               if (id.includes('@ionic/vue') || id.includes('@ionic/core')) {
                 return 'vendor-ionic';
               }
-              
+
               // Vue 核心库单独分包
               if (id.includes('vue') && !id.includes('@ionic')) {
                 return 'vendor-vue';
               }
-              
+
               // 图标库单独分包
               if (id.includes('ionicons') || id.includes('lucide')) {
                 return 'vendor-icons';
               }
-              
+
               // Axios 单独分包
               if (id.includes('axios')) {
                 return 'vendor-axios';
               }
-              
+
               // 其他第三方库
               return 'vendor-libs';
             }
-            
+
             // 业务代码分包
             // Composables 分包
             if (id.includes('/composables/')) {
               return 'composables';
             }
-            
+
             // Services 分包
             if (id.includes('/services/')) {
               return 'services';
             }
-            
+
             // Components 分包（非页面级）
             if (id.includes('/components/') && !id.includes('/pages/')) {
               return 'components';
             }
-            
+
             // Utils 分包
             if (id.includes('/utils/')) {
               return 'utils';
@@ -155,11 +155,11 @@ export default defineConfig(({ mode }) => {
           }
         }
       },
-      
+
       // 确保静态文件被复制
       copyPublicDir: true
     },
-    
+
     // 预览服务器配置
     preview: {
       host: true,
@@ -175,30 +175,40 @@ export default defineConfig(({ mode }) => {
         '/images/demo': {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
+        },
+        // 代理用户上传的图片
+        '/uploads': {
+          target: 'http://127.0.0.1:5010',
+          changeOrigin: true
         }
       }
     },
-    
+
     // 测试配置
-    test: { 
-      globals: true, 
-      environment: 'jsdom' 
+    test: {
+      globals: true,
+      environment: 'jsdom'
     },
-    
+
     // 开发服务器配置
     server: {
       host: '0.0.0.0',
       port: 5173,
-      proxy: { 
+      proxy: {
         '/api': 'http://127.0.0.1:5010',  // API 代理到本地后端
         // 只代理 demo 图片到后端，不代理 icons 等前端静态资源
         '/images/demo': {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
+        },
+        // 代理用户上传的图片
+        '/uploads': {
+          target: 'http://127.0.0.1:5010',
+          changeOrigin: true
         }
       },
     },
-    
+
     // 构建基础路径
     base: './'
   }

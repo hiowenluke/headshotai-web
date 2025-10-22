@@ -171,7 +171,8 @@ export default defineConfig(({ mode }) => {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
         },
-        '/images': {
+        // 只代理 demo 图片到后端，不代理 icons 等前端静态资源
+        '/images/demo': {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
         }
@@ -190,7 +191,8 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       proxy: { 
         '/api': 'http://127.0.0.1:5010',  // API 代理到本地后端
-        '/images': {
+        // 只代理 demo 图片到后端，不代理 icons 等前端静态资源
+        '/images/demo': {
           target: 'http://127.0.0.1:5010',
           changeOrigin: true
         }

@@ -329,8 +329,8 @@ const groupedItems = computed<GroupedCategory[]>(() => {
   /* background: rgb(122, 122, 122); */
   opacity: 1;
   z-index: 2;
-  border-right: 1px solid rgb(141, 141, 141);
-  border-bottom: 1px solid rgb(141, 141, 141);
+  border-right: 1px solid rgb(75, 75, 75);
+  border-bottom: 1px solid rgb(95, 95, 95);
 }
 
 .card.folder-style .card-image::after {

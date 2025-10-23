@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
-import { onMounted, onBeforeUnmount, watch, ref } from 'vue';
+import { onMounted, onBeforeUnmount, watch, ref, defineAsyncComponent } from 'vue';
 import PreferencesPage from '@/pages/sideMenu/PreferencesPage.vue';
 import DebugPopup from '@/popups/DebugPopup.vue';
 import { usePersistentModal } from '@/composables/usePersistentModal';
@@ -48,14 +48,24 @@ import UserCenterPage from '@/pages/userCenter/index.vue';
 import PaymentHistoryPage from '@/pages/userCenter/PaymentHistoryPage.vue';
 import UsageHistoryPage from '@/pages/userCenter/UsageHistoryPage.vue';
 import PricingPage from '@/pages/sideMenu/PricingPage.vue';
-import RefundPolicyPage from '@/pages/sideMenu/RefundPolicyPage.vue';
-import PrivacyPolicyPage from '@/pages/sideMenu/PrivacyPolicyPage.vue';
-import TermsOfServicePage from '@/pages/sideMenu/TermsOfServicePage.vue';
-import CookiePolicyPage from '@/pages/sideMenu/CookiePolicyPage.vue';
 import useSessionHeartbeat from '@/composables/useSessionHeartbeat';
 import { authState } from '@/state/authState';
 import { initializeHomePageLock, cleanupHomePageLock, getHomePageLock } from '@/utils/homePageLock';
 import { createSmartLoadingConfig } from '@/utils/smartLoading';
+
+// 懒加载政策页面组件（这些页面不常用，按需加载）
+const RefundPolicyPage = defineAsyncComponent(() => 
+  import('@/pages/sideMenu/RefundPolicyPage.vue')
+);
+const PrivacyPolicyPage = defineAsyncComponent(() => 
+  import('@/pages/sideMenu/PrivacyPolicyPage.vue')
+);
+const TermsOfServicePage = defineAsyncComponent(() => 
+  import('@/pages/sideMenu/TermsOfServicePage.vue')
+);
+const CookiePolicyPage = defineAsyncComponent(() => 
+  import('@/pages/sideMenu/CookiePolicyPage.vue')
+);
 
 // 首次访问偏好弹窗现在由index.html中的preferences-popup.js处理
 const showPreferencesPage = usePersistentModal('preferencesPage');

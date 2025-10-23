@@ -46,8 +46,9 @@ export default defineConfig(({ mode }) => {
     // 指定index.html位置
     root: './public',
 
-    // 静态资源目录
-    publicDir: '.', // 将public目录本身作为静态资源目录
+    // 静态资源目录（相对于 root）
+    // 由于 root 已经是 public，我们需要明确指定静态资源的位置
+    publicDir: path.resolve(__dirname, './public'),
 
     // 路径解析配置
     resolve: {
@@ -165,7 +166,6 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 5174,
       allowedHosts: PREVIEW_ALLOWED,
-      outDir: '../dist', // 指定预览服务器从哪个目录提供文件
       proxy: {
         '/api': {
           target: 'http://127.0.0.1:5010',

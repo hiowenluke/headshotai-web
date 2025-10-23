@@ -142,7 +142,7 @@ const formatCategoryName = (category: string): string => {
  */
 const extractFileName = (url: string): string => {
   const fileName = url.split('/').pop() || '';
-  return fileName.replace(/\.[^.]+$/, '');
+  return fileName.replace(/\.[^.]+$/, '').replace('-', ' ');
 };
 
 /**

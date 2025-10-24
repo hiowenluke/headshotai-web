@@ -242,7 +242,7 @@ onMounted(() => {
 
 .table-header {
     display: grid;
-    grid-template-columns: 40px 1fr 1fr 1fr 1fr;
+    grid-template-columns: 20px 1.5fr 1fr 1fr 1fr;
     gap: 8px;
     padding: 16px 20px;
     background: #333;
@@ -253,22 +253,18 @@ onMounted(() => {
     color: #ccc;
     font-size: 14px;
     font-weight: 600;
-    text-align: center;
+    text-align: left;
 }
 
 .header-select {
-    width: 40px;
-}
-
-.header-price {
-    text-align: left !important;
+    width: 20px;
 }
 
 /* Pricing Rows */
 .pricing-row {
     position: relative;
     display: grid;
-    grid-template-columns: 40px 1fr 1fr 1fr 1fr;
+    grid-template-columns: 20px 1.5fr 1fr 1fr 1fr;
     gap: 8px;
     padding: 16px 20px;
     border-bottom: 1px solid #444;
@@ -354,21 +350,21 @@ onMounted(() => {
     color: #ffd700;
     font-size: 16px;
     font-weight: 500;
-    text-align: center;
+    text-align: left;
 }
 
 .plan-bonus {
     color: #4ade80;
     font-size: 16px;
     font-weight: 500;
-    text-align: center;
+    text-align: left;
 }
 
 .plan-save {
     color: #4ade80;
     font-size: 16px;
     font-weight: 500;
-    text-align: center;
+    text-align: left;
 }
 
 /* Badges */

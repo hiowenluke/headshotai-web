@@ -7,8 +7,8 @@ export function useModalMode(props: any) {
   // 模式相关计算属性
   function normalizeModalStyle(style: string | undefined): 'vertical' | 'horizontal' | 'x' {
     const v = (style || '').toLowerCase();
-    if (v === 'vertical' || v === 'V' || v === 'v') return 'vertical';
-    if (v === 'horizontal' || v === 'H' || v === 'h') return 'horizontal';
+    if (v === 'vertical' || v === 'v') return 'vertical';
+    if (v === 'horizontal' || v === 'h') return 'horizontal';
     if (v === 'x') return 'x';
     throw new Error(`[PageLikeModal] Invalid modalStyle: ${style}`);
   }

@@ -80,7 +80,7 @@ interface Props {
   pageTitle?: string;                 // 页面标题
   tabs?: TabItem[];                   // Tab 配置
   modelValue?: string;                // 当前 Tab (v-model)
-  modalStyle?: 'vertical' | 'horizontal' | 'V' | 'H' | 'v' | 'h' | 'x';
+  modalStyle?: 'vertical' | 'horizontal' | 'V' | 'H' | 'v' | 'h' | 'X' | 'x';
   titleType?: 'icon-tabs' | 'text-tabs' | 'simple' | 'auto';
   hotDismissed?: boolean;             // HOT 标签是否已关闭
   enableTabSwipe?: boolean;           // 是否启用 Tab 滑动切换

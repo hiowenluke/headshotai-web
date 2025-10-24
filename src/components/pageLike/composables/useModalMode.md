@@ -49,7 +49,7 @@ function useModalMode(
 import { useModalMode } from './composables/useModalMode';
 
 const props = defineProps<{
-  modalStyle?: 'vertical' | 'horizontal' | 'V' | 'H' | 'v' | 'h' | 'x';
+  modalStyle?: 'vertical' | 'horizontal' | 'V' | 'H' | 'v' | 'h' | 'X' | 'x';
 }>();
 
 const modalMode = useModalMode(props);

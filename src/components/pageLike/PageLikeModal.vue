@@ -182,7 +182,7 @@ const props = withDefaults(defineProps<{
     tabs?: TabItem[];
     modelValue?: string;
     swipeThresholdRatio?: number;
-    modalStyle?: 'vertical' | 'horizontal' | 'V' | 'H' | 'v' | 'h' | 'x';
+    modalStyle?: 'vertical' | 'horizontal' | 'V' | 'H' | 'v' | 'h' | 'X' | 'x';
     titleType?: 'icon-tabs' | 'text-tabs' | 'simple' | 'auto';
     hotDismissed?: boolean;
     enableTabSwipe?: boolean;

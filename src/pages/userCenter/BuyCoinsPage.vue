@@ -2,7 +2,7 @@
     <PageLikeModal 
         :is-open="isOpen" 
         page-title="Buy Coins"
-        modal-style="H"
+        modal-style="X"
         title-type="simple"
         @close="$emit('close')"
         class="buy-coins-modal"
@@ -89,6 +89,7 @@ import { flameOutline, diamondOutline, checkmarkOutline, shieldCheckmarkOutline 
 import PageLikeModal from '@/components/pageLike/PageLikeModal.vue';
 import { authState } from '@/state/authState';
 import { fetchRechargeRules, type RechargeRule } from '@/services/rechargeService';
+import { createCheckoutSession, redirectToCheckout } from '@/services/paymentService';
 
 const props = defineProps<{ isOpen: boolean }>();
 defineEmits<{ (e: 'close'): void }>();
@@ -122,21 +123,36 @@ async function handlePurchase() {
     
     try {
         console.log('[BuyCoinsPage] Processing purchase for plan:', plan);
-        // TODO: Implement actual purchase logic
-        // This would typically involve:
-        // 1. Create payment intent/session
-        // 2. Redirect to payment processor
-        // 3. Handle payment completion
         
-        // For now, just simulate processing
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // 创建 Stripe Checkout Session
+        const session = await createCheckoutSession({
+            price_usd: parseFloat(plan.price),
+            coins: plan.coins,
+            bonus: plan.bonus,
+            success_url: `${window.location.origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${window.location.origin}/payment/cancel`
+        });
         
-        console.log('[BuyCoinsPage] Purchase completed successfully');
+        console.log('[BuyCoinsPage] Checkout session created, redirecting to Stripe...');
+        
+        // 重定向到 Stripe Checkout 页面
+        redirectToCheckout(session.checkout_url);
+        
     } catch (error) {
         console.error('[BuyCoinsPage] Purchase failed:', error);
-    } finally {
+        
+        // 显示错误提示
+        window.dispatchEvent(new CustomEvent('app:toast', {
+            detail: {
+                message: 'Failed to initiate payment. Please try again.',
+                type: 'error',
+                ttl: 3000
+            }
+        }));
+        
         isProcessing.value = false;
     }
+    // 注意：不在这里设置 isProcessing = false，因为页面会重定向
 }
 
 // Load pricing data

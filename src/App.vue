@@ -25,6 +25,10 @@
   <UsageHistoryPage :is-open="showUsageHistory" @close="showUsageHistory=false" />
   <BuyCoinsPage :is-open="showBuyCoins" @close="showBuyCoins=false" />
   
+  <!-- 支付相关页面 -->
+  <PaymentSuccessPage :is-open="showPaymentSuccess" @close="showPaymentSuccess=false" />
+  <PaymentCancelPage :is-open="showPaymentCancel" @close="showPaymentCancel=false" />
+  
   <AuthPage :is-open="showAuth" :message="authMessage" @close="handleAuthClose" />
   <MessageToast />
     <SideMenuPage :open="showSideMenu" @close="showSideMenu=false" />
@@ -49,6 +53,8 @@ import UserCenterPage from '@/pages/userCenter/index.vue';
 import PaymentHistoryPage from '@/pages/userCenter/PaymentHistoryPage.vue';
 import UsageHistoryPage from '@/pages/userCenter/UsageHistoryPage.vue';
 import BuyCoinsPage from '@/pages/userCenter/BuyCoinsPage.vue';
+import PaymentSuccessPage from '@/pages/payment/PaymentSuccessPage.vue';
+import PaymentCancelPage from '@/pages/payment/PaymentCancelPage.vue';
 import PricingPage from '@/pages/sideMenu/PricingPage.vue';
 import useSessionHeartbeat from '@/composables/useSessionHeartbeat';
 import { authState } from '@/state/authState';
@@ -81,6 +87,8 @@ const showCookiePolicy = usePersistentModal('cookiePolicy');
 const showPaymentHistory = usePersistentModal('paymentHistory');
 const showUsageHistory = usePersistentModal('usageHistory');
 const showBuyCoins = usePersistentModal('buyCoins');
+const showPaymentSuccess = usePersistentModal('paymentSuccess');
+const showPaymentCancel = usePersistentModal('paymentCancel');
 const devMode = import.meta.env && (import.meta.env.DEV || import.meta.env.MODE === 'development');
 
 // 初始化主页锁定功能

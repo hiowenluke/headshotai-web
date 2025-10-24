@@ -18,6 +18,7 @@
             <div class="pricing-table">
                 <!-- Table Header -->
                 <div class="table-header">
+                    <div class="header-select"></div>
                     <div class="header-price">Price</div>
                     <div class="header-coins">Coins</div>
                     <div class="header-bonus">Bonus</div>
@@ -43,9 +44,11 @@
                         {{ plan.badge }}
                     </div>
 
-                    <!-- Selection Indicator -->
-                    <div v-if="selectedPlan === index" class="selection-indicator">
-                        <ion-icon :icon="checkmarkOutline"></ion-icon>
+                    <!-- Selection Column with Checkmark -->
+                    <div class="plan-select">
+                        <div v-if="selectedPlan === index" class="checkmark-circle">
+                            <ion-icon :icon="checkmarkOutline" class="checkmark-icon"></ion-icon>
+                        </div>
                     </div>
 
                     <!-- Plan Details -->
@@ -108,6 +111,7 @@ const coinBalance = computed(() => authState.user?.coin_balance || 0);
 function selectPlan(index: number) {
     selectedPlan.value = index;
     console.log('[BuyCoinsPage] Selected plan:', pricingPlans.value[index]);
+    console.log('[BuyCoinsPage] Plan index:', index);
 }
 
 async function handlePurchase() {
@@ -238,8 +242,8 @@ onMounted(() => {
 
 .table-header {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 40px 1fr 1fr 1fr 1fr;
+    gap: 8px;
     padding: 16px 20px;
     background: #333;
     border-bottom: 1px solid #444;
@@ -252,6 +256,10 @@ onMounted(() => {
     text-align: center;
 }
 
+.header-select {
+    width: 40px;
+}
+
 .header-price {
     text-align: left !important;
 }
@@ -260,8 +268,8 @@ onMounted(() => {
 .pricing-row {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 40px 1fr 1fr 1fr 1fr;
+    gap: 8px;
     padding: 16px 20px;
     border-bottom: 1px solid #444;
     cursor: pointer;
@@ -296,6 +304,42 @@ onMounted(() => {
     border-radius: 8px;
     margin: 2px;
     padding: 14px 18px;
+}
+
+/* Selection Column */
+.plan-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+}
+
+.checkmark-circle {
+    width: 24px;
+    height: 24px;
+    background: #4ade80;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: checkmark-appear 0.2s ease;
+}
+
+.checkmark-icon {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+@keyframes checkmark-appear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* Plan Details */
@@ -356,25 +400,7 @@ onMounted(() => {
     font-size: 12px;
 }
 
-/* Selection Indicator */
-.selection-indicator {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 20px;
-    height: 20px;
-    background: #4ade80;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
 
-.selection-indicator ion-icon {
-    color: #fff;
-    font-size: 14px;
-}
 
 /* Guarantee Section */
 .guarantee-section {

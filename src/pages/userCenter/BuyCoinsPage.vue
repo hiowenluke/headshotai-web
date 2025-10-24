@@ -175,17 +175,6 @@ async function loadPricingData() {
     } catch (error) {
         console.error('[BuyCoinsPage] Failed to load pricing data:', error);
         
-        // Fallback to static data matching the image
-        pricingPlans.value = [
-            { price: '9.99', coins: 100, bonus: 0, save: 0 },
-            { price: '19.99', coins: 200, bonus: 20, save: 10 },
-            { price: '49.99', coins: 500, bonus: 75, save: 15 },
-            { price: '99.99', coins: 1000, bonus: 200, save: 20, badge: 'MOST POPULAR' },
-            { price: '199.99', coins: 2000, bonus: 600, save: 30 },
-            { price: '499.99', coins: 5000, bonus: 2000, save: 40 },
-            { price: '999.99', coins: 10000, bonus: 5000, save: 50, badge: 'BEST VALUE' }
-        ];
-        
         // Auto-select the most popular plan
         selectedPlan.value = 3;
     }

@@ -2,7 +2,7 @@
     <PageLikeModal 
         :is-open="isOpen" 
         page-title="Buy Coins"
-        modal-style="vertical"
+        modal-style="H"
         title-type="simple"
         @close="$emit('close')"
         class="buy-coins-modal"
@@ -196,8 +196,8 @@ onMounted(() => {
 <style scoped>
 .buy-coins-content {
     padding: 20px;
+    padding-top: 0px;
     color: #fff;
-    background: #1a1a1a;
     min-height: 100%;
 }
 
@@ -206,7 +206,7 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     padding: 0 4px;
 }
 
@@ -223,7 +223,7 @@ onMounted(() => {
 
 /* Pricing Table */
 .pricing-table {
-    background: #2a2a2a;
+    background: #363636;
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 20px;
@@ -234,7 +234,7 @@ onMounted(() => {
     grid-template-columns: 20px 1.5fr 1fr 1fr 1fr;
     gap: 8px;
     padding: 16px 8px;
-    background: #333;
+    background: #3f3f3f;
     border-bottom: 1px solid #444;
 }
 
@@ -258,7 +258,7 @@ onMounted(() => {
     padding: 16px 8px;
     border-bottom: 1px solid #444;
     cursor: pointer;
-    transition: all 0.2s ease;
+    /* transition: all 0.05s ease; */
 }
 
 .pricing-row:last-child {
@@ -270,9 +270,9 @@ onMounted(() => {
 }
 
 .pricing-row.selected {
-    background: #2d4a3e;
-    border: 1px solid #4ade80;
-    border-radius: 8px;
+    background: #192946;
+    border: 1px solid #6ba1ff;
+    border-radius: 12px;
     /* margin: 2px; */
     padding: 14px 7px;
 }
@@ -290,6 +290,7 @@ onMounted(() => {
     color: #fff;
     font-size: 16px;
     font-weight: bold;
+    margin-top: 3px;
 }
 
 @keyframes checkmark-appear {
@@ -319,14 +320,14 @@ onMounted(() => {
 }
 
 .plan-bonus {
-    color: #4ade80;
+    color: #a0c3ff;
     font-size: 16px;
     font-weight: 500;
     text-align: left;
 }
 
 .plan-save {
-    color: #4ade80;
+    color: #a0c3ff;
     font-size: 16px;
     font-weight: 500;
     text-align: left;
@@ -335,12 +336,12 @@ onMounted(() => {
 /* Badges */
 .plan-badge {
     position: absolute;
-    top: -8px;
+    top: -12px;
     left: 12px;
     padding: 4px 8px;
     border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -348,17 +349,17 @@ onMounted(() => {
 }
 
 .most-popular-badge {
-    background: #ff6b35;
+    background: #890000;
     color: #fff;
 }
 
 .best-value-badge {
-    background: #3b82f6;
+    background: #2058b9;
     color: #fff;
 }
 
 .badge-icon {
-    font-size: 12px;
+    font-size: 20px;
 }
 
 
@@ -368,35 +369,34 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    margin: 20px 0;
-    padding: 12px;
-    background: rgba(74, 222, 128, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(74, 222, 128, 0.3);
+    /* gap: 8px; */
+    /* background: rgba(255, 145, 0, 0.1); */
+    /* border-radius: 8px;
+    border: 1px solid rgba(74, 222, 128, 0.3); */
 }
 
 .guarantee-icon {
     color: #4ade80;
     font-size: 18px;
+    margin-right: 5px;
 }
 
 .guarantee-text {
     color: #4ade80;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.5px;
 }
 
 /* Purchase Button */
 .purchase-section {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .purchase-button {
     width: 100%;
     padding: 16px;
-    background: #3b82f6;
+    background: #2a78ff;
     color: #fff;
     border: none;
     border-radius: 12px;

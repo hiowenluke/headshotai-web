@@ -181,6 +181,8 @@ export const useFaceUploadState = (
         const sidx = selectedUploadedUrls.value.indexOf(oldUrl);
         if (sidx >= 0) {
             selectedUploadedUrls.value[sidx] = newUrl;
+            // 同步到 localStorage
+            saveFaceSelection(selectedUploadedUrls.value);
         }
         emitStateChange();
     };

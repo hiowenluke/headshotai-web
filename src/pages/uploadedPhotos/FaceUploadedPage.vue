@@ -181,6 +181,10 @@ watch(
 );
 
 const handleClose = () => {
+  // 触发 FaceUploadController 同步最新的上传列表
+  // 这样返回 GeneratorModal 后，FaceThumbBar 会显示最新上传的图片
+  uploadControllerRef.value?.syncRecentUploads?.();
+  
   // 选择状态已保存到 localStorage，不需要通知父组件
   emit('close');
 };
@@ -202,7 +206,10 @@ const handleUploadedCountChange = (count: number) => {
       try {
         const response = await fetchAllUploadedFaces();
         rawFaces.value = response.faces || [];
-        // 不要用父组件的值覆盖，rawFaces watch 会自动处理
+        
+        // 刷新选中状态：从 localStorage 重新加载
+        const cachedSelection = loadFaceSelection();
+        selectedUrlSet.value = new Set(cachedSelection);
       } catch (err: any) {
         console.error('[FaceUploadedPage] Failed to refresh faces after upload', err);
         // 静默失败，不影响用户体验

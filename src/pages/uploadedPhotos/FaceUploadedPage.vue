@@ -131,8 +131,14 @@ const applySelection = (urls: readonly string[]) => {
   if (normalized.length === current.size && normalized.every((url) => current.has(url))) {
     return;
   }
+  
+  console.log('[FaceUploadedPage] applySelection - filtering invalid URLs:', {
+    before: urls.length,
+    after: normalized.length
+  });
+  
   selectedUrlSet.value = new Set(normalized);
-  // 选择状态已保存到 localStorage，不需要通知父组件
+  saveFaceSelection(normalized);
 };
 
 const faces = computed<UiFaceItem[]>(() => {

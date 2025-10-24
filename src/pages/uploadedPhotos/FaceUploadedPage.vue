@@ -162,6 +162,14 @@ const syncFaces = async () => {
   const loadFaces = async () => {
     const response = await fetchAllUploadedFaces();
     rawFaces.value = response.faces || [];
+    
+    console.log('[FaceUploadedPage] Loaded faces from server:', {
+      total: rawFaces.value.length,
+      first: rawFaces.value[0],
+      last: rawFaces.value[rawFaces.value.length - 1],
+      order: 'as received from server'
+    });
+    
     // 不要用父组件的值覆盖，保持当前的选择状态
     // applySelection 会自动过滤掉不存在的 URL
   };

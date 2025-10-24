@@ -2,7 +2,7 @@ import { ref, computed } from 'vue';
 import { authState } from '@/state/authState';
 import { markUserHasUploadedFaces, hasUserUploadedFacesHistory } from '../../utils/recentFacesCache';
 import { loadDemoFacesCache } from '../../utils/demoFacesCache';
-import { loadFaceSelection } from '@/pages/uploadedPhotos/faceSelectionCache';
+import { loadFaceSelection, saveFaceSelection } from '@/pages/uploadedPhotos/faceSelectionCache';
 import type {
     FaceUploadControllerProps,
     FaceUploadControllerEmit,
@@ -36,23 +36,16 @@ export const useFaceUploadState = (
     const isPhotoUploadPlan = computed(() => planKey.value === '1P' || planKey.value === '20P');
     
     // FaceThumbBar 显示的图片列表（最多 4 张）
-    // 逻辑：优先显示选中的图片，不足 4 张时用最新上传的图片补充
+    // 逻辑：按照 recentUploadedUrls 的顺序显示，保持与 FaceUploadedPage 一致
     const uploadedImageUrls = computed(() => {
-        const selected = selectedUploadedUrls.value.slice(0, MAX_THUMBS);
-        if (selected.length >= MAX_THUMBS) {
-            return selected;
-        }
-        
-        // 不足 4 张，用最新上传的图片补充（排除已选中的）
-        const selectedSet = new Set(selected);
-        const additional = recentUploadedUrls.value.filter(url => !selectedSet.has(url));
-        const result = [...selected, ...additional].slice(0, MAX_THUMBS);
+        // 直接使用 recentUploadedUrls 的顺序（服务端返回的顺序）
+        const result = recentUploadedUrls.value.slice(0, MAX_THUMBS);
         
         console.log('[useFaceUploadState] uploadedImageUrls computed:', {
-            selected: selected.length,
-            additional: additional.length,
-            result: result.length,
-            urls: result
+            total: result.length,
+            urls: result,
+            selected: selectedUploadedUrls.value,
+            order: 'same as server order'
         });
         
         return result;
@@ -125,19 +118,22 @@ export const useFaceUploadState = (
         console.log('[useFaceUploadState] registerUploadedPhotos:', {
             urls,
             autoSelect,
-            currentSelected: selectedUploadedUrls.value
+            currentSelected: selectedUploadedUrls.value,
+            order: 'preserving server order'
         });
         
-        // 将新上传的图片添加到最新列表的开头
-        const newRecent = [...urls, ...recentUploadedUrls.value];
-        const uniqueRecent = Array.from(new Set(newRecent));
-        recentUploadedUrls.value = uniqueRecent.slice(0, MAX_THUMBS);
+        // 保持服务端返回的顺序，不要反转
+        // 服务端应该返回按 created_at 排序的数据
+        recentUploadedUrls.value = urls.slice(0, MAX_THUMBS);
         
         // 只有在 autoSelect 为 true 时才自动选中
         if (autoSelect) {
             const newSelected = [...urls, ...selectedUploadedUrls.value];
             const uniqueSelected = Array.from(new Set(newSelected));
             selectedUploadedUrls.value = uniqueSelected;
+            
+            // 同步到 localStorage
+            saveFaceSelection(selectedUploadedUrls.value);
         }
         
         hasEverUploaded.value = true;
@@ -154,6 +150,10 @@ export const useFaceUploadState = (
         });
         
         selectedUploadedUrls.value = selectedUrls;
+        
+        // 同步到 localStorage，确保 FaceUploadedPage 能看到最新的选中状态
+        saveFaceSelection(selectedUrls);
+        
         emitStateChange();
     };
 

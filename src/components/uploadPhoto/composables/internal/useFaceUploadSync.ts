@@ -1,4 +1,5 @@
 import { refreshSession, authState } from '@/state/authState';
+import { saveFaceSelection } from '@/pages/uploadedPhotos/faceSelectionCache';
 import type { FaceUploadControllerProps, FaceUploadState } from '../../types';
 
 export const useFaceUploadSync = (props: FaceUploadControllerProps, state: FaceUploadState) => {
@@ -14,12 +15,19 @@ export const useFaceUploadSync = (props: FaceUploadControllerProps, state: FaceU
 
             const faces = Array.isArray(authState.recentFaces) ? authState.recentFaces : [];
 
+            console.log('[useFaceUploadSync] authState.recentFaces:', {
+                total: faces.length,
+                order: 'as received from server',
+                faces
+            });
+
             if (faces.length) {
                 // 先从 localStorage 加载选中状态
                 state.refreshThumbBar();
                 
-                // 注册新的上传图片（不自动选中，保持 localStorage 中的选中状态）
-                state.registerUploadedPhotos([...faces].reverse(), { autoSelect: false });
+                // 注册新的上传图片（保持服务端返回的顺序，不自动选中）
+                // 服务端返回的顺序应该与 FaceUploadedPage 一致
+                state.registerUploadedPhotos([...faces], { autoSelect: false });
             } else {
                 // 没有上传的图片
                 const hasUploaded = state.uploadedImageUrls.value.length > 0;

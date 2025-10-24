@@ -46,7 +46,7 @@
 
                     <!-- Selection Column with Checkmark -->
                     <div class="plan-select">
-                        <div v-if="selectedPlan === index" class="checkmark-circle">
+                        <div v-if="selectedPlan === index">
                             <ion-icon :icon="checkmarkOutline" class="checkmark-icon"></ion-icon>
                         </div>
                     </div>
@@ -244,7 +244,7 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 20px 1.5fr 1fr 1fr 1fr;
     gap: 8px;
-    padding: 16px 20px;
+    padding: 16px 8px;
     background: #333;
     border-bottom: 1px solid #444;
 }
@@ -266,7 +266,7 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 20px 1.5fr 1fr 1fr 1fr;
     gap: 8px;
-    padding: 16px 20px;
+    padding: 16px 8px;
     border-bottom: 1px solid #444;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -282,24 +282,10 @@ onMounted(() => {
 
 .pricing-row.selected {
     background: #2d4a3e;
-    border: 2px solid #4ade80;
+    border: 1px solid #4ade80;
     border-radius: 8px;
-    margin: 2px;
-    padding: 14px 18px;
-}
-
-.pricing-row.most-popular {
-    border: 2px solid #ff6b35;
-    border-radius: 8px;
-    margin: 2px;
-    padding: 14px 18px;
-}
-
-.pricing-row.best-value {
-    border: 2px solid #3b82f6;
-    border-radius: 8px;
-    margin: 2px;
-    padding: 14px 18px;
+    /* margin: 2px; */
+    padding: 14px 7px;
 }
 
 /* Selection Column */
@@ -307,18 +293,8 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-}
-
-.checkmark-circle {
-    width: 24px;
-    height: 24px;
-    background: #4ade80;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: checkmark-appear 0.2s ease;
+    width: 20px;
+    /* background: blue; */
 }
 
 .checkmark-icon {

@@ -136,16 +136,6 @@ const syncFaces = async () => {
   const loadFaces = async () => {
     const response = await fetchAllUploadedFaces();
     rawFaces.value = response.faces || [];
-    
-    console.log('[FaceUploadedPage] Loaded faces from server:', {
-      total: rawFaces.value.length,
-      first: rawFaces.value[0],
-      last: rawFaces.value[rawFaces.value.length - 1],
-      order: 'as received from server'
-    });
-    
-    // 不要用父组件的值覆盖，保持当前的选择状态
-    // applySelection 会自动过滤掉不存在的 URL
   };
 
   try {
@@ -182,10 +172,6 @@ watch(
       // 每次打开页面时，从 localStorage 加载选中状态
       const cachedSelection = loadFaceSelection();
       selectedUrlSet.value = new Set(cachedSelection);
-      console.log('[FaceUploadedPage] Loaded selection on open:', {
-        total: cachedSelection.length,
-        urls: cachedSelection
-      });
       
       // 加载图片数据
       void syncFaces();
@@ -255,12 +241,6 @@ const toggleSelected = (url: string) => {
   
   selectedUrlSet.value = next;
   const selectedArray = Array.from(next);
-  
-  console.log('[FaceUploadedPage] toggleSelected:', {
-    url,
-    action: wasSelected ? 'unselected' : 'selected',
-    total: selectedArray.length
-  });
   
   // 通过 FaceUploadController 更新选中状态（会自动保存到 localStorage）
   uploadControllerRef.value?.setSelectedUploadedUrls?.(selectedArray);

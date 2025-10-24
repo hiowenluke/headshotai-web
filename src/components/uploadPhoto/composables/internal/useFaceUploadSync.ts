@@ -15,21 +15,13 @@ export const useFaceUploadSync = (props: FaceUploadControllerProps, state: FaceU
 
             const faces = Array.isArray(authState.recentFaces) ? authState.recentFaces : [];
 
-            console.log('[useFaceUploadSync] authState.recentFaces:', {
-                total: faces.length,
-                order: 'as received from server',
-                faces
-            });
-
             if (faces.length) {
                 // 先从 localStorage 加载选中状态（包括不在前4张的选中图片）
                 state.refreshThumbBar();
-                console.log('[useFaceUploadSync] After refreshThumbBar, selectedUploadedUrls:', state.selectedUploadedUrls.value);
                 
                 // 注册新的上传图片（保持服务端返回的顺序，不自动选中）
                 // 注意：这不会修改 selectedUploadedUrls，因为 autoSelect: false
                 state.registerUploadedPhotos([...faces], { autoSelect: false });
-                console.log('[useFaceUploadSync] After registerUploadedPhotos, selectedUploadedUrls:', state.selectedUploadedUrls.value);
             } else {
                 // 没有上传的图片
                 const hasUploaded = state.uploadedImageUrls.value.length > 0;

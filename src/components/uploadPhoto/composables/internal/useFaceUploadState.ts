@@ -38,17 +38,7 @@ export const useFaceUploadState = (
     // FaceThumbBar 显示的图片列表（最多 4 张）
     // 逻辑：按照 recentUploadedUrls 的顺序显示，保持与 FaceUploadedPage 一致
     const uploadedImageUrls = computed(() => {
-        // 直接使用 recentUploadedUrls 的顺序（服务端返回的顺序）
-        const result = recentUploadedUrls.value.slice(0, MAX_THUMBS);
-        
-        console.log('[useFaceUploadState] uploadedImageUrls computed:', {
-            total: result.length,
-            urls: result,
-            selected: selectedUploadedUrls.value,
-            order: 'same as server order'
-        });
-        
-        return result;
+        return recentUploadedUrls.value.slice(0, MAX_THUMBS);
     });
     
     const hasUploadedImages = computed(() => recentUploadedUrls.value.length > 0);
@@ -90,7 +80,6 @@ export const useFaceUploadState = (
 
     // 从服务端或缓存加载最新上传的图片列表
     const loadRecentUploads = (urls: string[]) => {
-        console.log('[useFaceUploadState] loadRecentUploads:', urls);
         recentUploadedUrls.value = urls.slice(0, MAX_THUMBS);
         
         if (urls.length > 0) {
@@ -104,10 +93,6 @@ export const useFaceUploadState = (
     // 从 localStorage 加载选中的图片列表（仅在初始化时调用）
     const loadSelectedFromCache = () => {
         const cached = loadFaceSelection();
-        console.log('[useFaceUploadState] loadSelectedFromCache (init only):', {
-            cached,
-            count: cached.length
-        });
         selectedUploadedUrls.value = cached;
         emitStateChange();
     };
@@ -117,13 +102,6 @@ export const useFaceUploadState = (
         if (!urls || !urls.length) return;
         
         const autoSelect = options?.autoSelect !== false; // 默认为 true
-        
-        console.log('[useFaceUploadState] registerUploadedPhotos:', {
-            urls,
-            autoSelect,
-            currentSelected: selectedUploadedUrls.value,
-            order: 'preserving server order'
-        });
         
         // 保持服务端返回的顺序，不要反转
         // 服务端应该返回按 created_at 排序的数据
@@ -148,18 +126,10 @@ export const useFaceUploadState = (
     // 更新选中状态（由 FaceThumbBar 或 FaceUploadedPage 调用）
     // 每次更新都会自动保存到 localStorage
     const updateSelection = (selectedUrls: string[]) => {
-        console.log('[useFaceUploadState] updateSelection:', {
-            before: selectedUploadedUrls.value.length,
-            after: selectedUrls.length,
-            urls: selectedUrls,
-            stack: new Error().stack
-        });
-        
         selectedUploadedUrls.value = selectedUrls;
         
         // 自动保存到 localStorage
         saveFaceSelection(selectedUrls);
-        console.log('[useFaceUploadState] Saved to localStorage');
         
         emitStateChange();
     };
@@ -171,8 +141,6 @@ export const useFaceUploadState = (
     // 处理从缓存加载的数据（兼容旧的接口）
     const handleCachedLoad = (items: Array<{ url: string; selected: boolean }>) => {
         if (!items || !items.length) return false;
-        
-        console.log('[useFaceUploadState] handleCachedLoad:', items);
         
         // 提取 URL 列表作为最新上传列表
         const urls = items.map(item => item.url);
@@ -232,7 +200,6 @@ export const useFaceUploadState = (
     
     // 刷新 FaceThumbBar 的图片列表（从 localStorage 重新加载选中状态）
     const refreshThumbBar = () => {
-        console.log('[useFaceUploadState] refreshThumbBar - reloading from localStorage');
         loadSelectedFromCache();
     };
 

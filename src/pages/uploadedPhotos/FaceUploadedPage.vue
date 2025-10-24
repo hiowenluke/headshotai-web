@@ -57,13 +57,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, ref, defineAsyncComponent, onMounted } from 'vue';
+import { computed, watch, ref, defineAsyncComponent } from 'vue';
 import PageLikeModal from '@/components/pageLike/PageLikeModal.vue';
 import FiniteCardList3 from '@/components/cardList/FiniteCardList3.vue';
 import { fetchAllUploadedFaces } from '@/services/uploadedFacesService';
 import { refreshSession, authState } from '@/state/authState';
 import type { FaceUploadExpose } from '@/components/uploadPhoto/types';
-import { saveFaceSelection, loadFaceSelection } from './faceSelectionCache';
+import { loadFaceSelection } from './faceSelectionCache';
 
 const FaceUploadController = defineAsyncComponent(() =>
   import('@/components/uploadPhoto/FaceUploadController.vue')
@@ -96,20 +96,9 @@ interface UiFaceItem {
 const rawFaces = ref<FaceItem[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
-const selectedUrlSet = ref<Set<string>>(new Set());
 
-// 组件挂载时，从缓存加载选择状态
-onMounted(() => {
-  const cachedSelection = loadFaceSelection();
-  if (cachedSelection.length > 0) {
-    selectedUrlSet.value = new Set(cachedSelection);
-    console.log('[FaceUploadedPage] Loaded selection from cache:', cachedSelection.length);
-    
-    // 通知父组件缓存的选择状态
-    // 注意：这里不使用 emitSelection，因为父组件可能还没准备好
-    // 等到页面打开时再同步
-  }
-});
+// 选中状态：从 FaceUploadController 获取（通过 localStorage 同步）
+const selectedUrlSet = ref<Set<string>>(new Set());
 
 // 上传相关状态
 const uploading = ref(false);
@@ -118,28 +107,7 @@ const uploadedCount = ref(0);
 const uploadTotal = ref(0);
 const uploadControllerRef = ref<FaceUploadExpose | null>(null);
 
-const toArray = (set: Set<string>) => Array.from(set);
-const availableUrls = computed(() => rawFaces.value.map((item) => item.url));
 const selectedUrlsArray = computed(() => Array.from(selectedUrlSet.value));
-
-// 不再需要向父组件发送选择状态，完全由 localStorage 管理
-
-const applySelection = (urls: readonly string[]) => {
-  const availableSet = availableUrls.value.length ? new Set(availableUrls.value) : null;
-  const normalized = availableSet ? urls.filter((url) => availableSet.has(url)) : [...urls];
-  const current = selectedUrlSet.value;
-  if (normalized.length === current.size && normalized.every((url) => current.has(url))) {
-    return;
-  }
-  
-  console.log('[FaceUploadedPage] applySelection - filtering invalid URLs:', {
-    before: urls.length,
-    after: normalized.length
-  });
-  
-  selectedUrlSet.value = new Set(normalized);
-  saveFaceSelection(normalized);
-};
 
 const faces = computed<UiFaceItem[]>(() => {
   return rawFaces.value.map((item) => {
@@ -211,37 +179,20 @@ watch(
   () => props.isOpen,
   (open) => {
     if (open) {
+      // 每次打开页面时，从 localStorage 加载选中状态
+      const cachedSelection = loadFaceSelection();
+      selectedUrlSet.value = new Set(cachedSelection);
+      console.log('[FaceUploadedPage] Loaded selection on open:', {
+        total: cachedSelection.length,
+        urls: cachedSelection
+      });
+      
+      // 加载图片数据
       void syncFaces();
     }
   },
-  { immediate: true }  // 立即执行一次，确保刷新后也能加载数据
+  { immediate: true }
 );
-
-// FaceUploadedPage 维护自己的选择状态，不依赖父组件
-// 父组件的 selectedUrls 受 MAX_THUMBS=4 限制，不应该覆盖我们的选择
-// 优先级：缓存 > 父组件传入的值
-let hasInitialized = false;
-
-watch(
-  () => props.isOpen,
-  (isOpen) => {
-    if (isOpen && !hasInitialized) {
-      hasInitialized = true;
-      
-      // 首次打开时的初始化逻辑：
-      // 从缓存加载选择状态（已在 onMounted 中加载）
-      
-      // 选择状态已从缓存加载，不需要通知父组件
-    }
-  },
-  { immediate: true }  // 立即执行，确保在 rawFaces watch 之前初始化
-);
-
-// 当 rawFaces 变化时，只需要过滤掉不存在的 URL，不要用父组件的值覆盖
-watch(rawFaces, () => {
-  // 只保留当前选择中仍然存在的 URL
-  applySelection(toArray(selectedUrlSet.value));
-});
 
 const handleClose = () => {
   // 选择状态已保存到 localStorage，不需要通知父组件
@@ -294,23 +245,28 @@ const closeErrorModal = () => {
 
 const toggleSelected = (url: string) => {
   const next = new Set(selectedUrlSet.value);
-  if (next.has(url)) {
+  const wasSelected = next.has(url);
+  
+  if (wasSelected) {
     next.delete(url);
   } else {
     next.add(url);
   }
-  selectedUrlSet.value = next;
-  const selectedArray = toArray(next);
   
-  // 保存到缓存
-  saveFaceSelection(selectedArray);
-  // 选择状态已保存到 localStorage，不需要通知父组件
+  selectedUrlSet.value = next;
+  const selectedArray = Array.from(next);
+  
+  console.log('[FaceUploadedPage] toggleSelected:', {
+    url,
+    action: wasSelected ? 'unselected' : 'selected',
+    total: selectedArray.length
+  });
+  
+  // 通过 FaceUploadController 更新选中状态（会自动保存到 localStorage）
+  uploadControllerRef.value?.setSelectedUploadedUrls?.(selectedArray);
 };
 
-// 监听选择变化，自动保存到缓存
-watch(selectedUrlSet, (newSet) => {
-  saveFaceSelection(toArray(newSet));
-}, { deep: true });
+// 选中状态通过 FaceUploadController 管理，不需要额外的 watch
 </script>
 
 <style scoped>

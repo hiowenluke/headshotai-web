@@ -101,10 +101,13 @@ export const useFaceUploadState = (
         syncViewMode();
     };
 
-    // 从 localStorage 加载选中的图片列表
+    // 从 localStorage 加载选中的图片列表（仅在初始化时调用）
     const loadSelectedFromCache = () => {
         const cached = loadFaceSelection();
-        console.log('[useFaceUploadState] loadSelectedFromCache:', cached);
+        console.log('[useFaceUploadState] loadSelectedFromCache (init only):', {
+            cached,
+            count: cached.length
+        });
         selectedUploadedUrls.value = cached;
         emitStateChange();
     };
@@ -143,16 +146,20 @@ export const useFaceUploadState = (
     };
 
     // 更新选中状态（由 FaceThumbBar 或 FaceUploadedPage 调用）
+    // 每次更新都会自动保存到 localStorage
     const updateSelection = (selectedUrls: string[]) => {
         console.log('[useFaceUploadState] updateSelection:', {
-            before: selectedUploadedUrls.value,
-            after: selectedUrls
+            before: selectedUploadedUrls.value.length,
+            after: selectedUrls.length,
+            urls: selectedUrls,
+            stack: new Error().stack
         });
         
         selectedUploadedUrls.value = selectedUrls;
         
-        // 同步到 localStorage，确保 FaceUploadedPage 能看到最新的选中状态
+        // 自动保存到 localStorage
         saveFaceSelection(selectedUrls);
+        console.log('[useFaceUploadState] Saved to localStorage');
         
         emitStateChange();
     };
@@ -223,9 +230,9 @@ export const useFaceUploadState = (
         fallbackDemoFaces.value = loadDemoFacesCache();
     };
     
-    // 刷新 FaceThumbBar 的图片列表（从 localStorage 加载选中状态）
+    // 刷新 FaceThumbBar 的图片列表（从 localStorage 重新加载选中状态）
     const refreshThumbBar = () => {
-        console.log('[useFaceUploadState] refreshThumbBar');
+        console.log('[useFaceUploadState] refreshThumbBar - reloading from localStorage');
         loadSelectedFromCache();
     };
 

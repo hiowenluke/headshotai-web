@@ -43,19 +43,11 @@ export function useFaceThumbBarSelection(
   };
 
   /**
-   * 当图片列表变化时，过滤掉不存在的选中项
+   * 注意：不要过滤选中项！
+   * FaceThumbBar 只显示前4张图片，但用户可能在 FaceUploadedPage 中选中了更多图片
+   * 我们不应该过滤掉不在当前显示列表中的选中项
    */
-  watch(images, (arr: string[]) => {
-    const currentSelectedList = selectedList();
-    if (!currentSelectedList.length) return;
-
-    const set = new Set(arr);
-    const filtered = currentSelectedList.filter(i => set.has(i));
-
-    if (filtered.length !== currentSelectedList.length) {
-      emit.selectionChange({ selected: filtered, count: filtered.length });
-    }
-  });
+  // watch 已移除，不再自动过滤选中项
 
   return {
     selectedSet,

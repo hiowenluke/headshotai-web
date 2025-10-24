@@ -23,6 +23,7 @@
   <!-- 用户中心子页面 -->
   <PaymentHistoryPage :is-open="showPaymentHistory" @close="showPaymentHistory=false" />
   <UsageHistoryPage :is-open="showUsageHistory" @close="showUsageHistory=false" />
+  <BuyCoinsPage :is-open="showBuyCoins" @close="showBuyCoins=false" />
   
   <AuthPage :is-open="showAuth" :message="authMessage" @close="handleAuthClose" />
   <MessageToast />
@@ -47,6 +48,7 @@ import LoadingToast from '@/components/toast/LoadingToast.vue';
 import UserCenterPage from '@/pages/userCenter/index.vue';
 import PaymentHistoryPage from '@/pages/userCenter/PaymentHistoryPage.vue';
 import UsageHistoryPage from '@/pages/userCenter/UsageHistoryPage.vue';
+import BuyCoinsPage from '@/pages/userCenter/BuyCoinsPage.vue';
 import PricingPage from '@/pages/sideMenu/PricingPage.vue';
 import useSessionHeartbeat from '@/composables/useSessionHeartbeat';
 import { authState } from '@/state/authState';
@@ -78,6 +80,7 @@ const showTermsOfService = usePersistentModal('termsOfService');
 const showCookiePolicy = usePersistentModal('cookiePolicy');
 const showPaymentHistory = usePersistentModal('paymentHistory');
 const showUsageHistory = usePersistentModal('usageHistory');
+const showBuyCoins = usePersistentModal('buyCoins');
 const devMode = import.meta.env && (import.meta.env.DEV || import.meta.env.MODE === 'development');
 
 // 初始化主页锁定功能
@@ -215,6 +218,11 @@ onMounted(() => {
     
     window.addEventListener('open-usage-history', () => {
       showUsageHistory.value = true;
+
+    });
+    
+    window.addEventListener('open-buy-coins', () => {
+      showBuyCoins.value = true;
 
     });
     

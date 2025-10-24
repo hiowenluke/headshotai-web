@@ -80,9 +80,9 @@ export function useMenuEventHandlers(
     
     // 处理购买金币
     const handleBuyCoins = () => {
-        // 打开价格页面
+        // 打开购买金币页面
         try { 
-            window.dispatchEvent(new Event('open-pricing')); 
+            window.dispatchEvent(new Event('open-buy-coins')); 
         } catch { 
             /* ignore */ 
         }

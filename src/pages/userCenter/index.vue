@@ -19,6 +19,10 @@
             <div class="user-info">
                 <h3 class="user-name">{{ userName || 'No username set' }}</h3>
                 <p class="user-email">{{ userEmail || 'No email set' }}</p>
+                <div class="coin-balance">
+                    <SvgIcon name="flash-outline" class="coin-icon" size="16px" />
+                    <span class="balance-text">{{ coinBalance }} Coins</span>
+                </div>
             </div>
         </div>
 
@@ -26,6 +30,12 @@
         <div class="user-actions">
             <!-- 加上 gesture-enabled-list，响应手势 -->
             <ion-list class="user-menu-list gesture-enabled-list">
+                <ion-item button lines="full" :detail="false" @click="handleBuyCoins">
+                    <SvgIcon name="card-outline" slot="start" class="menu-item-icon" size="24px" />
+                    <ion-label>Buy Coins</ion-label>
+                    <SvgIcon name="chevron-forward-outline" slot="end" class="chevron-end" size="20px" />
+                </ion-item>
+                
                 <ion-item button lines="full" :detail="false" @click="handlePaymentHistory">
                     <SvgIcon name="receipt" slot="start" class="menu-item-icon" size="24px" />
                     <ion-label>Payment History</ion-label>
@@ -138,6 +148,19 @@ const processedUserPicture = computed(() => {
 });
 const userInitial = computed(() => (userName.value || userEmail.value || '?').trim().charAt(0).toUpperCase());
 
+const coinBalance = computed(() => {
+  if (authState.user?.coin_balance !== undefined) return authState.user.coin_balance;
+  
+  try {
+    const userInfo = localStorage.getItem('user_info');
+    if (userInfo) {
+      const parsed = JSON.parse(userInfo);
+      return parsed.coin_balance || 0;
+    }
+  } catch { /* ignore */ }
+  return 0;
+});
+
 // ===== Avatar 错误处理和调试 =====
 function onAvatarError() {
   console.warn('[UserCenter] Avatar image failed to load:', {
@@ -157,6 +180,11 @@ const router = useRouter();
 // 退出登录对话框状态
 const showLogoutDialog = ref(false);
 
+
+function handleBuyCoins() {
+    // 触发购买金币页面打开事件
+    window.dispatchEvent(new Event('open-buy-coins'));
+}
 
 function handlePaymentHistory() {
     // 触发支付记录页面打开事件
@@ -261,6 +289,29 @@ function confirmLogout() {
     margin: 0;
     font-size: 14px;
     opacity: 0.7;
+}
+
+.coin-balance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    display: inline-flex;
+}
+
+.coin-icon {
+    color: #ffd700;
+}
+
+.balance-text {
+    color: #ffd700;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .user-actions {

@@ -2,7 +2,7 @@
     <PageLikeModal 
         :is-open="isOpen" 
         page-title="Buy Coins"
-        modal-style="X"
+        modal-style="H"
         title-type="simple"
         @close="$emit('close')"
         class="buy-coins-modal"

@@ -18,10 +18,10 @@ export const useFaceUploadSync = (props: FaceUploadControllerProps, state: FaceU
             if (faces.length) {
                 // 先从 localStorage 加载选中状态（包括不在前4张的选中图片）
                 state.refreshThumbBar();
-                
+
                 // 注册新的上传图片（保持服务端返回的顺序，不自动选中）
-                // 注意：这不会修改 selectedUploadedUrls，因为 autoSelect: false
-                state.registerUploadedPhotos([...faces], { autoSelect: false });
+                // 使用 replace: true 表示这是从服务端加载的完整列表，而不是本地新上传
+                state.registerUploadedPhotos([...faces], { autoSelect: false, replace: true });
             } else {
                 // 没有上传的图片
                 const hasUploaded = state.uploadedImageUrls.value.length > 0;
@@ -36,8 +36,8 @@ export const useFaceUploadSync = (props: FaceUploadControllerProps, state: FaceU
             if (state.looksLikeUploadedFaceUrl(props.image)) {
                 const alreadyHasImage = state.uploadedImageUrls.value.includes(props.image);
                 if (!alreadyHasImage && props.image) {
-                    // 真正新上传的图片，自动选中
-                    state.registerUploadedPhotos([props.image], { autoSelect: true });
+                    // 真正新上传的图片，自动选中（追加模式，不使用 replace）
+                    state.registerUploadedPhotos([props.image], { autoSelect: true, replace: false });
                 }
             }
             state.refreshHasEverUploadedFlag();

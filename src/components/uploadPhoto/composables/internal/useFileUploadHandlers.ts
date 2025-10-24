@@ -16,7 +16,8 @@ export const useFileUploadHandlers = ({ props, emit, state }: FileUploadHandlers
         if (existing) return existing;
         const localUrl = previewManager.createPreview(file);
         if (state.useUploadWithDemo.value) state.useUploadWithDemo.value = false;
-        state.registerUploadedPhotos([localUrl]);
+        // 本地上传：追加到列表开头，自动选中
+        state.registerUploadedPhotos([localUrl], { autoSelect: true, replace: false });
         return localUrl;
     };
 

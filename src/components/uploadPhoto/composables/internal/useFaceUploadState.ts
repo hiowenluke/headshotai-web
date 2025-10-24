@@ -98,14 +98,21 @@ export const useFaceUploadState = (
     };
 
     // 注册新上传的图片（自动选中并添加到最新列表）
-    const registerUploadedPhotos = (urls: string[], options?: { autoSelect?: boolean }) => {
+    const registerUploadedPhotos = (urls: string[], options?: { autoSelect?: boolean; replace?: boolean }) => {
         if (!urls || !urls.length) return;
         
         const autoSelect = options?.autoSelect !== false; // 默认为 true
+        const replace = options?.replace ?? false; // 默认为 false（追加模式）
         
-        // 保持服务端返回的顺序，不要反转
-        // 服务端应该返回按 created_at 排序的数据
-        recentUploadedUrls.value = urls.slice(0, MAX_THUMBS);
+        if (replace) {
+            // 替换模式：直接使用服务端返回的列表（用于页面刷新时从服务端加载）
+            recentUploadedUrls.value = urls.slice(0, MAX_THUMBS);
+        } else {
+            // 追加模式：将新上传的图片添加到列表开头（用于本地上传）
+            const merged = [...urls, ...recentUploadedUrls.value];
+            const unique = Array.from(new Set(merged));
+            recentUploadedUrls.value = unique.slice(0, MAX_THUMBS);
+        }
         
         // 只有在 autoSelect 为 true 时才自动选中
         if (autoSelect) {

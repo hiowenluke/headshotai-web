@@ -48,7 +48,8 @@ export const useFaceUploadWatchers = ({ props, emit, state, syncRecentUploads }:
     watch(() => props.image, (img) => {
         if (!state.looksLikeUploadedFaceUrl(img) || !authState.isLoggedIn) return;
         if (!state.uploadedImageUrls.value.includes(img) && img) {
-            state.registerUploadedPhotos([img]);
+            // 外部传入的新图片，追加到列表开头
+            state.registerUploadedPhotos([img], { autoSelect: true, replace: false });
         }
     });
 };

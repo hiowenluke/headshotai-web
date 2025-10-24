@@ -104,7 +104,7 @@ export interface FaceUploadState {
     emitStateChange: () => void;
     refreshHasEverUploadedFlag: () => boolean;
     applyCachedUploads: (items: CachedPhotoItem[]) => boolean;
-    registerUploadedPhotos: (urls: string[], options?: { autoSelect?: boolean }) => void;
+    registerUploadedPhotos: (urls: string[], options?: { autoSelect?: boolean; replace?: boolean }) => void;
     updateSelection: (selectedUrls: string[]) => void;
     handleThumbSelectionChange: (payload: { selected: string[]; count: number }) => void;
     handleCachedLoad: (items: CachedPhotoItem[]) => void;

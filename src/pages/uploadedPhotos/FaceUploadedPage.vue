@@ -180,6 +180,28 @@ watch(
   { immediate: true }
 );
 
+// 当图片列表加载完成后，过滤掉不存在的选中项
+watch(
+  () => rawFaces.value,
+  (newFaces) => {
+    if (newFaces.length === 0) return;
+    
+    // 获取所有有效的 URL
+    const validUrls = new Set(newFaces.map(f => f.url));
+    
+    // 过滤掉不存在的选中项
+    const filteredSelection = Array.from(selectedUrlSet.value).filter(url => validUrls.has(url));
+    
+    // 如果选中项发生了变化，更新状态
+    if (filteredSelection.length !== selectedUrlSet.value.size) {
+      selectedUrlSet.value = new Set(filteredSelection);
+      
+      // 同步到 FaceUploadController 和 localStorage
+      uploadControllerRef.value?.setSelectedUploadedUrls?.(filteredSelection);
+    }
+  }
+);
+
 const handleClose = () => {
   // 触发 FaceUploadController 同步最新的上传列表
   // 这样返回 GeneratorModal 后，FaceThumbBar 会显示最新上传的图片

@@ -44,12 +44,9 @@ function handleRetry() {
 }
 
 function handleGoBack() {
-    // 先关闭 Buy Coins 窗口
+    // 同时关闭 Buy Coins 窗口和当前窗口
     window.dispatchEvent(new Event('close-buy-coins'));
-    // 然后关闭当前窗口
-    setTimeout(() => {
-        emit('close');
-    }, 50);
+    emit('close');
 }
 </script>
 

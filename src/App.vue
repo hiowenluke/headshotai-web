@@ -234,6 +234,11 @@ onMounted(() => {
 
     });
     
+    window.addEventListener('close-buy-coins', () => {
+      showBuyCoins.value = false;
+
+    });
+    
     // 监听支付回调事件
     window.addEventListener('open-payment-success', (event: Event) => {
       const customEvent = event as CustomEvent<{ sessionId: string }>;

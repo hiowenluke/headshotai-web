@@ -4,7 +4,7 @@
         page-title="Payment Cancelled"
         modal-style="vertical"
         title-type="simple"
-        @close="handleClose"
+        @close="emit('close')"
         class="payment-cancel-modal"
     >
         <div class="payment-cancel-content">
@@ -22,7 +22,7 @@
                 <button class="retry-button" @click="handleRetry">
                     Try Again
                 </button>
-                <button class="back-button" @click="handleClose">
+                <button class="back-button" @click="handleGoBack">
                     Go Back
                 </button>
             </div>
@@ -31,14 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import SvgIcon from '@/components/icons/SvgIcon.vue';
 import PageLikeModal from '@/components/pageLike/PageLikeModal.vue';
 
 defineProps<{ isOpen: boolean }>();
 const emit = defineEmits<{ (e: 'close'): void }>();
-
-const router = useRouter();
 
 function handleRetry() {
     emit('close');
@@ -46,9 +43,13 @@ function handleRetry() {
     window.dispatchEvent(new Event('open-buy-coins'));
 }
 
-function handleClose() {
-    emit('close');
-    router.push('/home');
+function handleGoBack() {
+    // 先关闭 Buy Coins 窗口
+    window.dispatchEvent(new Event('close-buy-coins'));
+    // 然后关闭当前窗口
+    setTimeout(() => {
+        emit('close');
+    }, 50);
 }
 </script>
 

@@ -24,8 +24,8 @@ manualChunks: (id) => {
       return 'vendor-vue';
     }
     
-    // 图标库单独分包 - 约 50KB
-    if (id.includes('ionicons') || id.includes('lucide')) {
+    // 图标库单独分包 - 约 3KB
+    if (id.includes('ionicons')) {
       return 'vendor-icons';
     }
     

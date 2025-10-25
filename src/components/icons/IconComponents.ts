@@ -1,4 +1,4 @@
-// 图标组件映射，用于替换ionicons和lucide图标
+// 图标组件映射，用于创建基于 SvgIcon 的图标组件
 import { defineComponent, h } from 'vue';
 import SvgIcon from './SvgIcon.vue';
 

@@ -120,7 +120,7 @@ export default defineConfig(({ mode }) => {
               }
 
               // 图标库单独分包
-              if (id.includes('ionicons') || id.includes('lucide')) {
+              if (id.includes('ionicons')) {
                 return 'vendor-icons';
               }
 

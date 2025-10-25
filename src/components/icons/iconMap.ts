@@ -1,6 +1,6 @@
-// 图标名称映射，用于从ionicons和lucide图标名称转换为本地SVG文件名
+// 图标名称映射，用于将图标名称转换为本地SVG文件名
 export const iconMap = {
-  // Ionicons 图标映射
+  // 原 Ionicons 图标映射
   logoGoogle: 'logo-google',
   logoFacebook: 'logo-facebook',
   checkboxOutline: 'checkbox-outline',
@@ -19,7 +19,7 @@ export const iconMap = {
   menuOutline: 'menu-outline',
   flashOffOutline: 'flash-off-outline',
   
-  // Lucide 图标映射
+  // 原 Lucide 图标映射
   User: 'user',
   Heart: 'heart',
   CircleDollarSign: 'circle-dollar-sign',

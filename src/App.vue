@@ -235,7 +235,16 @@ onMounted(() => {
     });
     
     // 监听支付回调事件
-    window.addEventListener('open-payment-success', () => {
+    window.addEventListener('open-payment-success', (event: Event) => {
+      const customEvent = event as CustomEvent<{ sessionId: string }>;
+      
+      // 转发 session ID 给 PaymentSuccessPage
+      if (customEvent.detail?.sessionId) {
+        window.dispatchEvent(new CustomEvent('payment-success-data', {
+          detail: { sessionId: customEvent.detail.sessionId }
+        }));
+      }
+      
       showPaymentSuccess.value = true;
 
     });

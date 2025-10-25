@@ -17,11 +17,11 @@ export async function bootstrap() {
   loadUIState();
   initUIStatePersistence();
 
-  // 处理支付回调（Stripe 重定向）
-  handlePaymentCallback();
-
   // 创建应用实例
   const app = createAppInstance();
+
+  // 处理支付回调（Stripe 重定向）- 在路由初始化后但挂载前
+  handlePaymentCallback();
 
   // 处理认证
   handleFullPageAuth();

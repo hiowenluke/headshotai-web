@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { IonSpinner } from '@ionic/vue';
 import SvgIcon from '@/components/icons/SvgIcon.vue';
@@ -63,32 +63,60 @@ const paymentDetails = ref<{
     new_balance: number;
 } | null>(null);
 
+// 存储 session ID（从事件或 URL 获取）
+const sessionId = ref<string>('');
+
 // 验证支付状态
 async function verifyPayment() {
-    const sessionId = route.query.session_id as string;
+    // 优先使用存储的 session ID，否则从 URL 获取
+    const sid = sessionId.value || (route.query.session_id as string);
     
-    if (!sessionId) {
+    if (!sid) {
         console.error('[PaymentSuccess] No session ID provided');
         return;
     }
 
     try {
-        console.log('[PaymentSuccess] Verifying payment for session:', sessionId);
+        console.log('[PaymentSuccess] Verifying payment for session:', sid);
         
-        const status = await getPaymentStatus(sessionId);
+        const status = await getPaymentStatus(sid);
         
-        if (status.status === 'completed') {
+        console.log('[PaymentSuccess] Payment status response:', status);
+        
+        // 适配后端实际返回的字段名
+        const response = status as any;
+        
+        // 检查多种可能的状态字段
+        const isCompleted = status.status === 'completed' || 
+                           response.payment_status === 'completed' ||
+                           response.status === 'succeeded' ||
+                           (response.coins_total && response.coins_total > 0);
+        
+        if (isCompleted) {
             paymentDetails.value = {
-                coins_added: status.coins_added || 0,
-                new_balance: status.new_balance || 0
+                coins_added: response.coins_total || response.coins_added || 0,
+                new_balance: response.new_balance || 0
             };
             
             // 刷新用户会话以更新金币余额
             await refreshSession();
             
-            console.log('[PaymentSuccess] Payment verified successfully');
+            console.log('[PaymentSuccess] Payment verified successfully, details:', paymentDetails.value);
         } else {
-            console.warn('[PaymentSuccess] Payment not completed:', status.status);
+            console.warn('[PaymentSuccess] Payment not completed, status:', status.status, 'full response:', response);
+            
+            // 即使状态是 pending，如果有 coins_total，也显示详情
+            if (response.coins_total && response.coins_total > 0) {
+                paymentDetails.value = {
+                    coins_added: response.coins_total,
+                    new_balance: response.new_balance || 0
+                };
+                
+                // 刷新用户会话
+                await refreshSession();
+                
+                console.log('[PaymentSuccess] Showing payment details despite pending status');
+            }
         }
     } catch (error) {
         console.error('[PaymentSuccess] Failed to verify payment:', error);
@@ -100,11 +128,34 @@ function handleClose() {
     router.push('/home');
 }
 
+// 监听自定义事件来接收 session ID
+function handlePaymentSuccessEvent(event: Event) {
+    const customEvent = event as CustomEvent<{ sessionId: string }>;
+    if (customEvent.detail?.sessionId) {
+        sessionId.value = customEvent.detail.sessionId;
+        console.log('[PaymentSuccess] Received session ID from event:', sessionId.value);
+    }
+}
+
 onMounted(() => {
-    if (props.isOpen) {
+    window.addEventListener('payment-success-data', handlePaymentSuccessEvent);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('payment-success-data', handlePaymentSuccessEvent);
+});
+
+// 监听弹窗打开状态
+watch(() => props.isOpen, (isOpen) => {
+    console.log('[PaymentSuccess] isOpen changed:', isOpen);
+    console.log('[PaymentSuccess] Current route:', route.fullPath);
+    console.log('[PaymentSuccess] Session ID from query:', route.query.session_id);
+    console.log('[PaymentSuccess] Session ID from ref:', sessionId.value);
+    
+    if (isOpen) {
         verifyPayment();
     }
-});
+}, { immediate: true });
 </script>
 
 <style scoped>

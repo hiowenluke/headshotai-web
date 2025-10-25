@@ -160,7 +160,9 @@ watch(() => props.isOpen, (isOpen) => {
 
 <style scoped>
 .payment-success-content {
-    padding: 40px 20px;
+    position: relative;
+    top: -100px;
+    padding: 0 20px;
     text-align: center;
     color: #fff;
     min-height: 100%;

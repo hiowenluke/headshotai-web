@@ -39,15 +39,15 @@
                 >
                     <!-- Badge -->
                     <div v-if="plan.badge" class="plan-badge" :class="plan.badge === 'BEST VALUE' ? 'best-value-badge' : 'most-popular-badge'">
-                        <ion-icon v-if="plan.badge === 'MOST POPULAR'" :icon="flameOutline" class="badge-icon"></ion-icon>
-                        <ion-icon v-if="plan.badge === 'BEST VALUE'" :icon="diamondOutline" class="badge-icon"></ion-icon>
+                        <SvgIcon v-if="plan.badge === 'MOST POPULAR'" name="flame" size="20px" class="badge-icon" />
+                        <SvgIcon v-if="plan.badge === 'BEST VALUE'" name="diamond-outline" size="20px" class="badge-icon" />
                         {{ plan.badge }}
                     </div>
 
                     <!-- Selection Column with Checkmark -->
                     <div class="plan-select">
                         <div v-if="selectedPlan === index">
-                            <ion-icon :icon="checkmarkOutline" class="checkmark-icon"></ion-icon>
+                            <SvgIcon name="checkmark-circle-outline" size="16px" class="checkmark-icon" />
                         </div>
                     </div>
 
@@ -61,7 +61,7 @@
 
             <!-- Money Back Guarantee -->
             <div class="guarantee-section">
-                <ion-icon :icon="shieldCheckmarkOutline" class="guarantee-icon"></ion-icon>
+                <SvgIcon name="shield-checkmark-outline" size="18px" class="guarantee-icon" />
                 <span class="guarantee-text">100% MONEY BACK GUARANTEE</span>
             </div>
 
@@ -84,8 +84,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { IonIcon } from '@ionic/vue';
-import { flameOutline, diamondOutline, checkmarkOutline, shieldCheckmarkOutline } from 'ionicons/icons';
+import SvgIcon from '@/components/icons/SvgIcon.vue';
 import PageLikeModal from '@/components/pageLike/PageLikeModal.vue';
 import { authState } from '@/state/authState';
 import { fetchRechargeRules, type RechargeRule } from '@/services/rechargeService';

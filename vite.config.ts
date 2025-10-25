@@ -119,10 +119,7 @@ export default defineConfig(({ mode }) => {
                 return 'vendor-vue';
               }
 
-              // 图标库单独分包
-              if (id.includes('ionicons')) {
-                return 'vendor-icons';
-              }
+              // 图标库已移除，现在使用自定义 SVG
 
               // Axios 单独分包
               if (id.includes('axios')) {

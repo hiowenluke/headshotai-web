@@ -13,6 +13,6 @@ export interface GeneratorProps {
 export interface TabItem {
     key: string;
     label: string;
-    icon?: any;
+    icon?: string; // SVG 图标名称
     hot?: boolean;
 }

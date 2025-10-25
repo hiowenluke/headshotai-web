@@ -10,7 +10,7 @@
         <div class="payment-success-content">
             <!-- Success Icon -->
             <div class="success-icon-wrapper">
-                <ion-icon :icon="checkmarkCircleOutline" class="success-icon"></ion-icon>
+                <SvgIcon name="checkmark-circle-outline" size="80px" class="success-icon" />
             </div>
 
             <!-- Success Message -->
@@ -46,8 +46,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { IonIcon, IonSpinner } from '@ionic/vue';
-import { checkmarkCircleOutline } from 'ionicons/icons';
+import { IonSpinner } from '@ionic/vue';
+import SvgIcon from '@/components/icons/SvgIcon.vue';
 import PageLikeModal from '@/components/pageLike/PageLikeModal.vue';
 import { getPaymentStatus } from '@/services/paymentService';
 import { refreshSession } from '@/state/authState';
@@ -125,7 +125,6 @@ onMounted(() => {
 }
 
 .success-icon {
-    font-size: 80px;
     color: #4ade80;
 }
 

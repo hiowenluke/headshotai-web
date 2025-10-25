@@ -5,15 +5,14 @@
             <div v-for="tab in tabs" :key="tab.key"
                 :class="['tab-item', { active: currentTab === tab.key }]"
                 @click="$emit('tabChange', tab.key)">
-                <ion-icon v-if="tab.icon" :icon="tab.icon" />
+                <SvgIcon v-if="tab.icon" :name="tab.icon" size="20px" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { IonIcon } from '@ionic/vue';
-
+import SvgIcon from '@/components/icons/SvgIcon.vue';
 import type { TabItem } from '@/types/generator';
 
 defineProps<{
@@ -62,7 +61,5 @@ defineEmits<{
     color: white;
 }
 
-.tab-item ion-icon {
-    font-size: 20px;
-}
+/* Icon size is controlled by SvgIcon component */
 </style>

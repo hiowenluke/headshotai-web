@@ -10,7 +10,7 @@
         <div class="payment-cancel-content">
             <!-- Cancel Icon -->
             <div class="cancel-icon-wrapper">
-                <ion-icon :icon="closeCircleOutline" class="cancel-icon"></ion-icon>
+                <SvgIcon name="close-circle-outline" size="80px" class="cancel-icon" />
             </div>
 
             <!-- Cancel Message -->
@@ -32,8 +32,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { IonIcon } from '@ionic/vue';
-import { closeCircleOutline } from 'ionicons/icons';
+import SvgIcon from '@/components/icons/SvgIcon.vue';
 import PageLikeModal from '@/components/pageLike/PageLikeModal.vue';
 
 defineProps<{ isOpen: boolean }>();
@@ -71,7 +70,6 @@ function handleClose() {
 }
 
 .cancel-icon {
-    font-size: 80px;
     color: #ff6b6b;
 }
 

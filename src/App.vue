@@ -52,7 +52,7 @@ import LoadingToast from '@/components/toast/LoadingToast.vue';
 import UserCenterPage from '@/pages/userCenter/index.vue';
 import PaymentHistoryPage from '@/pages/userCenter/PaymentHistoryPage.vue';
 import UsageHistoryPage from '@/pages/userCenter/UsageHistoryPage.vue';
-import BuyCoinsPage from '@/pages/userCenter/BuyCoinsPage.vue';
+import BuyCoinsPage from '@/pages/payment/BuyCoinsPage.vue';
 import PaymentSuccessPage from '@/pages/payment/PaymentSuccessPage.vue';
 import PaymentCancelPage from '@/pages/payment/PaymentCancelPage.vue';
 import PricingPage from '@/pages/sideMenu/PricingPage.vue';

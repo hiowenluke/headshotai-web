@@ -10,7 +10,7 @@
         <div class="payment-success-content">
             <!-- Success Icon -->
             <div class="success-icon-wrapper">
-                <SvgIcon name="checkmark-circle-outline" size="80px" class="success-icon" />
+                <SvgIcon name="checkmark-circle-outline" size="80px" color="#86efac" class="success-icon" />
             </div>
 
             <!-- Success Message -->
@@ -163,7 +163,6 @@ watch(() => props.isOpen, (isOpen) => {
     padding: 40px 20px;
     text-align: center;
     color: #fff;
-    background: #1a1a1a;
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -175,9 +174,7 @@ watch(() => props.isOpen, (isOpen) => {
     margin-bottom: 24px;
 }
 
-.success-icon {
-    color: #4ade80;
-}
+/* 颜色通过 SvgIcon 的 color prop 设置 */
 
 .success-title {
     font-size: 28px;

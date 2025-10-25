@@ -10,7 +10,7 @@
         <div class="payment-cancel-content">
             <!-- Cancel Icon -->
             <div class="cancel-icon-wrapper">
-                <SvgIcon name="close-circle-outline" size="80px" class="cancel-icon" />
+                <SvgIcon name="close-circle-outline" size="80px" color="#ef4444" class="cancel-icon" />
             </div>
 
             <!-- Cancel Message -->
@@ -23,7 +23,7 @@
                     Try Again
                 </button>
                 <button class="back-button" @click="handleClose">
-                    Back to Home
+                    Go Back
                 </button>
             </div>
         </div>
@@ -57,7 +57,6 @@ function handleClose() {
     padding: 40px 20px;
     text-align: center;
     color: #fff;
-    background: #1a1a1a;
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -69,9 +68,7 @@ function handleClose() {
     margin-bottom: 24px;
 }
 
-.cancel-icon {
-    color: #ff6b6b;
-}
+/* 颜色通过 SvgIcon 的 color prop 设置 */
 
 .cancel-title {
     font-size: 28px;

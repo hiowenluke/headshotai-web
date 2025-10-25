@@ -9,6 +9,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     component: () => import('../views/HomePage.vue')
+  },
+  {
+    path: '/payment/success',
+    redirect: '/home'
+  },
+  {
+    path: '/payment/cancel',
+    redirect: '/home'
   }
 ]
 

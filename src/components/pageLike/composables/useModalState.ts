@@ -3,6 +3,7 @@
 
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { modalStackManager, getModalElementZIndex } from '@/utils/zIndexManager';
+import { ensureSkeletonRemoved } from '@/utils/skeletonControl';
 
 export function useModalState(props: any, emit: any) {
   // 生成唯一的模态框ID
@@ -58,6 +59,9 @@ export function useModalState(props: any, emit: any) {
     if (v) {
       modalStackManager.pushModal(modalId.value);
       isClosing.value = false;
+      
+      // 确保骨架屏被移除（当任何弹窗打开时）
+      ensureSkeletonRemoved();
     } else {
       modalStackManager.popModal(modalId.value);
       isClosing.value = false;

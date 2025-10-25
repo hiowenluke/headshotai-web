@@ -9,12 +9,16 @@ import { createAppInstance } from './appSetup';
 import { handleFullPageAuth, setupSessionRefresh } from './authHandler';
 import { setupSafariCompatibility } from './safariCompat';
 import { mountApp } from './routeManager';
+import { handlePaymentCallback } from './paymentHandler';
 import router from '@/router';
 
 export async function bootstrap() {
   // 初始化 UI 状态持久化
   loadUIState();
   initUIStatePersistence();
+
+  // 处理支付回调（Stripe 重定向）
+  handlePaymentCallback();
 
   // 创建应用实例
   const app = createAppInstance();

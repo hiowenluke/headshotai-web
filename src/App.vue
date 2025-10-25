@@ -234,6 +234,17 @@ onMounted(() => {
 
     });
     
+    // 监听支付回调事件
+    window.addEventListener('open-payment-success', () => {
+      showPaymentSuccess.value = true;
+
+    });
+    
+    window.addEventListener('open-payment-cancel', () => {
+      showPaymentCancel.value = true;
+
+    });
+    
     // 主页锁定功能已在 homePageLock.initialize() 中处理
 });
 
